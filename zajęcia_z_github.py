@@ -2,9 +2,7 @@
 from math import *
 import numpy as np
 
-o = object()
 
-#class Transformation:
     
 def Np(f, a, e2):
     N = a / np.sqrt(1 - e2 * np.sin(f)**2)
@@ -74,3 +72,29 @@ def GK2PL2000(xgk,ygk,l0):
     x_00 = xgk * 0.999923
     y_00 = ygk * 0.999923 + strefa * 1000000 + 500000
     return(x_00, y_00)
+
+
+
+o = object()
+
+class Transformation:
+    def init(self, model: str = "wgs84"):
+    # Wykorzystywane Parametry elipsoid
+    # a = dłuższa półos (promień rownikowy)
+    # b = krótsza półos (promień południkowy)
+    # flat = spłaszczenie
+    # e2 = mimosród^2
+    if model == "wgs84"
+        self.a = 6378137
+        self.b = 6356752.31424518
+    elif model == "grs80":
+        self.a = 6378137.0
+        self.b = 6356752.31414036
+    elif model == "mars":
+        self.a = 3396900.0
+        self.b = 3376097.80585952
+    else:
+        raise NotImplementedError(f"{model} model not implemented")
+    self.flat = (self.a - self.b) / self.a    
+    self.e = sqrt(2 * self.flat - self.flat ** 2) # mimosrod
+    self.e2 = (2 * self.flat - self.flat ** 2)    #mimosrod^2
