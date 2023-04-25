@@ -185,28 +185,28 @@ class Transformation:
     
     def flh2neu(fl1, fl2, self):
         """   
-        Funkcja przelicza współrzędne geodezyjne  
-        na współrzędne topograficzne.
+        Funkcja przelicza wspolrzedne geodezyjne  
+        na wspolrzedne topograficzne.
     
         Parameters
         -------
         fl1 : [list]  
-             wpółrzedne geodezyjne punktu początkowego [radiany]
+             wpolrzedne geodezyjne punktu poczatkowego [radiany]
         fl2 : [list]  
-             wpółrzedne geodezyjne punktu końcowego [radiany]
+             wpolrzedne geodezyjne punktu koncowego [radiany]
         a   : [float] 
-             dłuższa półoś elipsoidy [m]
+             dluzsza polos elipsoidy [m]
         e2  : [float] 
-             mimośrod elipsoidy [niemianowana]
+             mimosrod elipsoidy [niemianowana]
       
         Returns
         -------
         N : [float] 
-            wpółrzedna topocentryczna N (north) [m]
+            wpolrzedna topocentryczna N (north) [m]
         E : [float] 
-            wpółrzedna topocentryczna E (east) [m]
+            wpolrzedna topocentryczna E (east) [m]
         U : [float] 
-            wpółrzedna topocentryczna U (up) [m]
+            wpolrzedna topocentryczna U (up) [m]
     
         """  
         X1, Y1, Z1 = self.flh2XYZ(fl1[0], fl1[1], fl1[2], self.a, self.e2)
