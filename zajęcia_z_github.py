@@ -131,5 +131,9 @@ if __name__ == "__main__":
     f = f1 * 180 / pi 
     l = l1 * 180 / pi
     print(f, l, h)
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> d010e18adcee26cd40a1de827cf82b882ce33b4e
 
