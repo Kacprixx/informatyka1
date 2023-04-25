@@ -79,22 +79,29 @@ o = object()
 
 class Transformation:
     def init(self, model: str = "wgs84"):
-    # Wykorzystywane Parametry elipsoid
-    # a = dłuższa półos (promień rownikowy)
-    # b = krótsza półos (promień południkowy)
-    # flat = spłaszczenie
-    # e2 = mimosród^2
-    if model == "wgs84"
+# Wykorzystywane Parametry elipsoid
+# a = dłuższa półos (promień rownikowy)
+# b = krótsza półos (promień południkowy)
+# flat = spłaszczenie
+# e2 = mimosród^2
+# Inicjuje obiekt elipsoidy na podstawie wybranego modelu.
+# Dostępne modele to: WGS84, GRS80 i Mars.
+# Argumenty:
+#    model (str): Łańcuch znaków określający model elipsoidy. 
+#                  Domyślnie ustawione na 'wgs84'.
+
+    if model == "wgs84":
+        self.a = 6378137 
         self.a = 6378137
         self.b = 6356752.31424518
     elif model == "grs80":
-        self.a = 6378137.0
+        self.a = 6378137
         self.b = 6356752.31414036
     elif model == "mars":
-        self.a = 3396900.0
+        self.a = 3396900
         self.b = 3376097.80585952
     else:
         raise NotImplementedError(f"{model} model not implemented")
-    self.flat = (self.a - self.b) / self.a    
+    self.flat = (self.a - self.b) / self.a        #splaszczenie
     self.e = sqrt(2 * self.flat - self.flat ** 2) # mimosrod
-    self.e2 = (2 * self.flat - self.flat ** 2)    #mimosrod^2
+    self.e2 = (2 * self.flat - self.flat ** 2)    #mimosrod^2    
