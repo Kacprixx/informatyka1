@@ -78,7 +78,7 @@ def GK2PL2000(xgk,ygk,l0):
 o = object()
 
 class Transformation:
-    def init(self, model: str = "wgs84"):
+    def __init__(self, model: str = "wgs84"):
        
 # Wykorzystywane Parametry elipsoid
 # a = dłuższa półos (promień rownikowy)
@@ -114,7 +114,7 @@ class Transformation:
         
     def XYZ2flh(self,X,Y,Z):
         p = np.sqrt(X**2 + Y**2)
-        f = np.arctan(Z / (p * (1 - self.ecc2)))
+        f = np.arctan(Z / (p * (1 - self.e2)))
         while True:
             N = Np(f,self)
             h = (p/np.cos(f)) - N
@@ -125,3 +125,11 @@ class Transformation:
         l = np.arctan2(Y , X)
         return(f,l,h)
         
+if __name__ == "__main__":
+    #tworze obiekt
+    geo = Transformation(model = "wgs84")
+    #wsp geocentryczne 
+    X = 3664940.500; Y = 1409153.590; Z = 5009571.170
+    f, l , h = geo.XYZ2flh(X, Y, Z)
+    print(f, l, h)
+    
