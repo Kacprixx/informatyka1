@@ -183,6 +183,47 @@ class Transformation:
         return(X, Y, Z)
     
     
+    def flh2neu(fl1, fl2, self):
+        """   
+        Funkcja przelicza współrzędne geodezyjne  
+        na współrzędne topograficzne.
+    
+        Parameters
+        -------
+        fl1 : [list]  
+             wpółrzedne geodezyjne punktu początkowego [radiany]
+        fl2 : [list]  
+             wpółrzedne geodezyjne punktu końcowego [radiany]
+        a   : [float] 
+             dłuższa półoś elipsoidy [m]
+        e2  : [float] 
+             mimośrod elipsoidy [niemianowana]
+      
+        Returns
+        -------
+        N : [float] 
+            wpółrzedna topocentryczna N (north) [m]
+        E : [float] 
+            wpółrzedna topocentryczna E (east) [m]
+        U : [float] 
+            wpółrzedna topocentryczna U (up) [m]
+    
+        """  
+        X1, Y1, Z1 = self.flh2XYZ(fl1[0], fl1[1], fl1[2], self.a, self.e2)
+        X2, Y2, Z2 = self.flh2XYZ(fl2[0], fl2[1], fl2[2], self.a, self.e2)
+    
+        dx = [X2 - X1, Y2 - Y1, Z2 - Z1]  
+        R = np.array([[-np.sin(fl1[0]) * np.cos(fl1[1]), -np.sin(fl1[1]), np.cos(fl1[0]) * np.cos(fl1[1])],
+                      [-np.sin(fl1[0]) * np.sin(fl1[1]), np.cos(fl1[1]) , np.cos(fl1[0]) * np.sin(fl1[1])],
+                      [np.cos(fl1[0]) , 0 , np.sin(fl1[0])]])
+    
+        neu = R.T @ dx
+        N = neu[0]
+        E = neu[1]
+        U = neu[2]
+        return(N, E, U)
+
+    
     
 if __name__ == "__main__":
     #tworze obiekt
