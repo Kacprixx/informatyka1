@@ -132,13 +132,4 @@ if __name__ == "__main__":
     l = l1 * 180 / pi
     print(f, l, h)
     
-elif __name__ == "__main__":
-    #tworze obiekt
-    geo = Transformation(model = "grs80")
-    #wsp geocentryczne 
-    X = 3664940.500; Y = 1409153.590; Z = 5009571.170
-    f1, l1 , h = geo.XYZ2flh(X, Y, Z)
-    f = f1 * 180 / pi 
-    l = l1 * 180 / pi
-    print(f, l, h)
 
