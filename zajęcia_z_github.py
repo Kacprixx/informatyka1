@@ -2,32 +2,12 @@
 from math import *
 import numpy as np
 
-#2
-    
+
 def Np(f, self):
-    N = self.a / np.sqrt(1 - self.e2 * np.sin(f)**2)
-    return(N) 
-    
-def XYZ2flh(self,X,Y,Z):
-    p = np.sqrt(X**2 + Y**2)
-    f = np.arctan(Z / (p * (1 - self.ecc2)))
-    while True:
-        N = Np(f,self)
-        h = (p/np.cos(f)) - N
-        fp = f    #f poprzednie 
-        f = np.arctan(Z/(p*(1 - self.e2 * N/ (N +h))))
-        if abs(fp - f) < (0.000001/206265):
-            break
-    l = np.arctan2(Y , X)
-    return(f,l,h)    
+        N = self.a / np.sqrt(1 - self.e2 * np.sin(f)**2)
+        return(N) 
 
-def flh2XYZ(f, l, h, a, e2):
-    N = Np(f, a, e2)
-    X = (N + h) * np.cos(f) * np.cos(l)
-    Y = (N + h) * np.cos(f) * np.sin(l)
-    Z = (N * (1 - e2) + h) * np.sin(f)
-    return(X, Y, Z)
-
+   
 def Rneu(f, l):
     R = np.array([[-np.sin(f) * np.cos(l), -np.sin(l), np.cos(f) * np.cos(l)],
                   [-np.sin(f) * np.sin(l), np.cos(l) , np.cos(f) * np.sin(l)],
@@ -79,18 +59,20 @@ o = object()
 
 class Transformation:
     def __init__(self, model: str = "grs80"):
-       
-# Wykorzystywane Parametry elipsoid
-# a = dłuższa półos (promień rownikowy)
-# b = krótsza półos (promień południkowy)
-# flat = spłaszczenie
-# e2 = mimosród^2
-# Inicjuje obiekt elipsoidy na podstawie wybranego modelu.
-# Dostępne modele to: WGS84, GRS80 i Mars.
-# Argumenty:
-#    model (str): Łańcuch znaków określający model elipsoidy. 
-#                  Domyślnie ustawione na 'wgs84'.
-
+        '''       
+        Wykorzystywane Parametry elipsoid
+        a = dłuższa półos (promień rownikowy)
+        b = krótsza półos (promień południkowy)
+        flat = spłaszczenie
+        e2 = mimosród^2
+ 
+        Inicjuje obiekt elipsoidy na podstawie wybranego modelu.
+        Dostępne modele to: WGS84, GRS80 i Mars.
+        
+        Argumenty:
+        model (str): Łańcuch znaków określający model elipsoidy. 
+                  Domyślnie ustawione na 'wgs84'.
+        '''
         if model == "wgs84":
             self.a = 6378137 
             self.a = 6378137
@@ -100,16 +82,58 @@ class Transformation:
             self.b = 6356752.31414036
         else:
             raise NotImplementedError(f"{model} model not implemented")
-        self.flat = (self.a - self.b) / self.a        #splaszczenie
+        self.flat = (self.a - self.b) / self.a        # splaszczenie
         self.e = sqrt(2 * self.flat - self.flat ** 2) # mimosrod
-        self.e2 = (2 * self.flat - self.flat ** 2)    #mimosrod^2  
+        self.e2 = (2 * self.flat - self.flat ** 2)    # mimosrod^2  
         
         
     def Np(f, self):
+        '''
+        liczy promien krzywizny w I wertykale 
+
+        Parameters
+        ----------
+        f : float
+            szerokosc geodezyjna [radiany]
+        
+
+        Returns
+        -------
+        N : float
+            promien krzywizny w I wertykale [m]
+
+        '''
         N = self.a / np.sqrt(1 - self.e2 * np.sin(f)**2)
         return(N) 
         
     def XYZ2flh(self,X,Y,Z):
+        '''
+        przeliczenie wspolrzednych geocentrycznych na 
+        wspolrzedne geodezyjne (Algorytm Hirvonena)
+
+        Parameters
+        ----------
+        X : float
+            wspolrzedna geocentryczna [m]
+        Y : float
+            wspolrzedna geocentryczna [m]
+        Z : float
+            wspolrzedna geocentryczna [m]
+        a : float
+            dluzsza polos elipsoidy [m]
+        e2: float
+            mimosrod elipsoidy [niemianowane]
+
+        Returns
+        -------
+        f : float
+            szerokosc geodezyjna [radiany]
+        l : float
+            dlugosc geodezyjna [radiany]
+        h : float
+            wysokosc elipsoidalna [m]
+
+        '''
         p = np.sqrt(X**2 + Y**2)
         f = np.arctan(Z / (p * (1 - self.e2)))
         while True:
@@ -122,6 +146,44 @@ class Transformation:
         l = np.arctan2(Y , X)
         return(f,l,h)
         
+    
+    
+    def flh2XYZ(f, l, h, self):
+        '''
+        przeliczane wspolrzednych geodezyjnych 
+        na wspolrzedne geocentryczne 
+
+        Parameters
+        ----------
+        f : float
+            szerokosc geodezyjna [radiany]
+        l : float
+            dlugosc geodezyjna [radiany]
+        h : float
+            wysokosc elipsoidalna [m]
+        a : float
+            dluzsza polos elipsoidy [m]
+        e2: float
+            mimosrod elipsoidy [niemianowane]
+
+        Returns
+        -------
+        X : float
+            wspolrzedna geocentryczna [m]
+        Y : float
+            wspolrzedna geocentryczna [m]
+        Z : float
+            wspolrzedna geocentryczna [m]
+
+        '''
+        N = Np(f, self)
+        X = (N + h) * np.cos(f) * np.cos(l)
+        Y = (N + h) * np.cos(f) * np.sin(l)
+        Z = (N * (1 - self.e2) + h) * np.sin(f)
+        return(X, Y, Z)
+    
+    
+    
 if __name__ == "__main__":
     #tworze obiekt
     geo = Transformation(model = "wgs84")
