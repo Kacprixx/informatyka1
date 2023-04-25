@@ -5,7 +5,7 @@ import numpy as np
 #2
     
 def Np(f, self):
-    N = self.a / np.sqrt(1 - self.ecc2 * np.sin(f)**2)
+    N = self.a / np.sqrt(1 - self.e2 * np.sin(f)**2)
     return(N) 
     
 def XYZ2flh(self,X,Y,Z):
@@ -15,7 +15,7 @@ def XYZ2flh(self,X,Y,Z):
         N = Np(f,self)
         h = (p/np.cos(f)) - N
         fp = f    #f poprzednie 
-        f = np.arctan(Z/(p*(1 - self.ecc2 * N/ (N +h))))
+        f = np.arctan(Z/(p*(1 - self.e2 * N/ (N +h))))
         if abs(fp - f) < (0.000001/206265):
             break
     l = np.arctan2(Y , X)
@@ -105,5 +105,23 @@ class Transformation:
             raise NotImplementedError(f"{model} model not implemented")
         self.flat = (self.a - self.b) / self.a        #splaszczenie
         self.e = sqrt(2 * self.flat - self.flat ** 2) # mimosrod
-        self.e2 = (2 * self.flat - self.flat ** 2)    #mimosrod^2   
+        self.e2 = (2 * self.flat - self.flat ** 2)    #mimosrod^2  
+        
+        
+    def Np(f, self):
+        N = self.a / np.sqrt(1 - self.e2 * np.sin(f)**2)
+        return(N) 
+        
+    def XYZ2flh(self,X,Y,Z):
+        p = np.sqrt(X**2 + Y**2)
+        f = np.arctan(Z / (p * (1 - self.ecc2)))
+        while True:
+            N = Np(f,self)
+            h = (p/np.cos(f)) - N
+            fp = f    #f poprzednie 
+            f = np.arctan(Z/(p*(1 - self.e2 * N/ (N +h))))
+            if abs(fp - f) < (0.000001/206265):
+                break
+        l = np.arctan2(Y , X)
+        return(f,l,h)
         
