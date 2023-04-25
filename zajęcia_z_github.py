@@ -98,9 +98,6 @@ class Transformation:
         elif model == "grs80":
             self.a = 6378137
             self.b = 6356752.31414036
-        elif model == "mars":
-            self.a = 3396900
-            self.b = 3376097.80585952
         else:
             raise NotImplementedError(f"{model} model not implemented")
         self.flat = (self.a - self.b) / self.a        #splaszczenie
@@ -133,3 +130,11 @@ if __name__ == "__main__":
     f, l , h = geo.XYZ2flh(X, Y, Z)
     print(f, l, h)
     
+elif __name__ == "__main__":
+    #tworze obiekt
+    geo = Transformation(model = "grs80")
+    #wsp geocentryczne 
+    X = 3664940.500; Y = 1409153.590; Z = 5009571.170
+    f, l , h = geo.XYZ2flh(X, Y, Z)
+    print(f, l, h)
+
