@@ -78,7 +78,7 @@ def GK2PL2000(xgk,ygk,l0):
 o = object()
 
 class Transformation:
-    def __init__(self, model: str = "wgs84"):
+    def __init__(self, model: str = "grs80"):
        
 # Wykorzystywane Parametry elipsoid
 # a = dłuższa półos (promień rownikowy)
@@ -131,14 +131,5 @@ if __name__ == "__main__":
     f = f1 * 180 / pi 
     l = l1 * 180 / pi
     print(f, l, h)
-    
-elif __name__ == "__main__":
-    #tworze obiekt
-    geo = Transformation(model = "grs80")
-    #wsp geocentryczne 
-    X = 3664940.500; Y = 1409153.590; Z = 5009571.170
-    f1, l1 , h = geo.XYZ2flh(X, Y, Z)
-    f = f1 * 180 / pi 
-    l = l1 * 180 / pi
-    print(f, l, h)
+
 
