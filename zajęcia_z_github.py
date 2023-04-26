@@ -12,25 +12,6 @@ def Np(f, self):
 o = object()
 
 class Transformation:
-    def Np(f, self):
-        '''
-        liczy promien krzywizny w I wertykale 
-
-        Parameters
-        ----------
-        f : float
-            szerokosc geodezyjna [radiany]
-        
-
-        Returns
-        -------
-        N : float
-            promien krzywizny w I wertykale [m]
-
-        '''
-        N = self.a / np.sqrt(1 - self.e2 * np.sin(f)**2)
-        return(N)
-    
     def __init__(self, model: str = "grs80"):
         '''       
         Wykorzystywane Parametry elipsoid
@@ -101,6 +82,24 @@ class Transformation:
         l = np.arctan2(Y , X)
         return(f,l,h)
         
+    def Np(f, self):
+        '''
+        liczy promien krzywizny w I wertykale 
+
+        Parameters
+        ----------
+        f : float
+            szerokosc geodezyjna [radiany]
+        
+
+        Returns
+        -------
+        N : float
+            promien krzywizny w I wertykale [m]
+
+        '''
+        N = self.a / np.sqrt(1 - self.e2 * np.sin(f)**2)
+        return(N)
     
     
     def flh2XYZ(f, l, h, self):
