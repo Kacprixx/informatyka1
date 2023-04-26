@@ -286,7 +286,6 @@ class Transformation:
 
 
 
-
     def ukl1992(f, l, self):
             """   
             przeliczenie wszpolrzednych geodezyjnych 
