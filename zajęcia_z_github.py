@@ -334,7 +334,58 @@ class Transformation:
             
             return(x92, y92)
 
-
+    def GK_2_flh(xGK, yGK, m, l0, self):    
+        """   
+        przeliczenie wspolrzednych z ukladu Gaussa-Krugera
+        na wspolrzedne geodezyjne 
+        
+        Parameters
+        -------
+        xGK  : [float] 
+                wspolrzedna w ukladzie Gaussa - Krugera 
+        yGK  : [float] 
+                wspolrzedna w ukladzie Gaussa - Krugera 
+        l0 : [float] 
+                poludnik osiowy [radiany] 
+        m    : [float] 
+                elemntarna skala długości [niemianowana]
+        a    : [float] 
+                dluzsza polos elipsoidy [m]
+        e2   : [float] 
+                mimosrod elipsoidy [niemianowana]
+          
+        Returns
+        -------
+        f   : [float] 
+                szerokosc geodezyjna [radiany]
+        l  : [float] 
+                dlugosc geodezyjna [radiany]
+        
+        """  
+        A0 = 1 - (self.e2/4) - (3*(self.e2**2))/64 - (5*(self.e2**3))/256
+        A2 = 3/8 * (self.e2 + ((self.e2**2)/4) + ((15*(self.e2**3))/128))
+        A4 = 15/256 * ((self.e2**2) + (3*(self.e2**3))/4)
+        A6 = (35*(self.e2**3))/3072
+        eps = 0.000001/3600 *math.pi/180
+        b1 = xGK/(self.a * A0)
+        
+        while True:
+            b0 = b1
+            b1= (xGK/(self.a * A0 )) + ((A2/A0) * math.sin(2*b0)) - ((A4/A0) * math.sin(4*b0)) + ((A6/A0) * math.sin(6*b0))
+            b = b1
+            if math.fabs(b1 - b0) <= eps:
+                break
+            
+        e_2 = self.e2/(1-self.e2)
+        N = self.a/math.sqrt(1 - self.e2 * math.sin(b)**2)
+        t = math.tan(b)
+        n2 = e_2 * math.cos(b)**2
+        
+        fi = b - (t/2) * (((yGK/(N))**2) * (1 + n2) - (1/12) * ((yGK/( N))**4) * (5 + (3 * t**2) + (6*n2) - (6 * n2 * t**2) - (3 * n2**2) - (9 * t**2 * n2**2)) + (1/360) * ((yGK/(N))**6) * (61 + (90 * t**2) + (45 * t**4) + (107 * n2) - (162 * t**2 * n2) - (45 * (t**4) * n2)))
+        lam = (1/math.cos(b)) * ((yGK/(N)) - ((1/6) * (yGK/(N))**3 * (1 + 2 * t**2 + n2)) + ((1/120) * (yGK/( N))**5 * (5 + (28 * t**2) + (24 * t**4) + (6 * n2) + (8 * n2 * t**2))))
+        l = l0 + lam
+        
+        return(f, l)
 
 
 
