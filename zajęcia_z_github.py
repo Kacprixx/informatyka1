@@ -334,7 +334,7 @@ class Transformation:
             
             return(x92, y92)
 
-<<<<<<< HEAD
+
     def u92u00_2_GK(X, Y):
         """   
         Funkcja przelicza współrzędne układu 1992 lub układu 1992  
@@ -379,7 +379,7 @@ class Transformation:
             m = m00
             
         return(xGK, yGK, l0, m)
-=======
+
     def GK_2_flh(xGK, yGK, m, l0, self):    
         """   
         przeliczenie wspolrzednych z ukladu Gaussa-Krugera
@@ -433,7 +433,7 @@ class Transformation:
         
         return(f, l)
 
->>>>>>> d669ae9f815afa25deccbe793d23badf6eb67d96
+
 
 
 
