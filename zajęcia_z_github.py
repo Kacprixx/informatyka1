@@ -222,8 +222,57 @@ class Transformation:
         E = neu[1]
         U = neu[2]
         return(N, E, U)
+    
+    
+    def ukl1992(f, l, self):
+            """   
+            przeliczenie wszpolrzednych geodezyjnych 
+            na wspolrzedne ukladu 1992
+            
+            Parameters
+            -------
+            f  : [float] 
+                  szerokosc geodezyjna [rad]
+            l : [float] 
+                  długosc geodezyjna [rad]
+            a : [float] 
+                  dluzsza polos elipsoidy [m]
+            e2: [float] 
+                  mimosrod elipsoidy [niemianowana]
+            
+            Returns
+            -------
+            x92 : [float] 
+                  wspolrzedna w ukladzie 1992 [m]
+            y92 : [float]  
+                  wspolrzedna w ukladzie 1992 [m]  
+            
+            """ 
+            m = 0.9993
+            
+            N = self.a/math.sqrt(1-self.e2*math.sin(fi)**2)
+            e2p = self.e2/(1-self.e2)
+            t = math.tan(fi)
+            n2 = e2p * math.cos(fi)**2
+            l0 = math.radians(19)
+            lam = l - l0
+            
+            A0 = 1 - (self.e2/4) - ((3*(self.e2**2))/64) - ((5*(self.e2**3))/256)
+            A2 = (3/8) * (self.e2 + ((self.e2**2)/4) + ((15 * (self.e2**3))/128))
+            A4 = (15/256) * (self.e2**2 + ((3*(self.e2**3))/4))
+            A6 = (35 * (self.e2**3))/3072
+            
+            sig = self.a * ((A0*fi) - (A2*math.sin(2*fi)) + (A4*math.sin(4*fi)) - (A6*math.sin(6*fi)))
+            x = sig + ((lam**2)/2) * (N*math.sin(fi)*math.cos(fi)) * (1 + ((lam**2)/12) * ((math.cos(fi))**2) * (5 - t**2 + 9*n2 + 4*(n2**2)) + ((lam**4)/360) * ((math.cos(fi))**4) * (61 - (58*(t**2)) + (t**4) + (270*n2) - (330 * n2 *(t**2))))
+            y = lam * (N * math.cos(fi)) * (1 + ((((lam**2)/6) * (math.cos(fi))**2) * (1-(t**2) + n2)) +  (((lam**4)/(120)) * (math.cos(fi)**4)) * (5 - (18 * (t**2)) + (t**4) + (14*n2) - (58*n2*(t**2))))
+            
+            x92 = x * m - 5300000
+            y92 = y * m + 500000
+            
+            return(x92, y92)
 
     
+
     
 if __name__ == "__main__":
     #tworze obiekt
