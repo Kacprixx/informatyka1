@@ -7,8 +7,7 @@ def Np(f, self):
         N = self.a / np.sqrt(1 - self.e2 * np.sin(f)**2)
         return(N) 
 
-
-
+    
 o = object()
 
 class Transformation:
@@ -81,7 +80,10 @@ class Transformation:
                 break
         l = np.arctan2(Y , X)
         return(f,l,h)
-        
+    
+   
+    
+    
     def Np(f, self):
         '''
         liczy promien krzywizny w I wertykale 
