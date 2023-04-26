@@ -456,7 +456,29 @@ class Transformation:
         
         return(f, l)
 
-    
+    def rad2dms(rad):
+        """   
+        przeliczenie wartosci katow z radianow na stopnie 
+        
+        Parameters
+        -------
+        rad : [float] 
+            kat w radianach [radiany]
+       
+        Returns
+        -------
+        dms : [list] 
+            kat w stopniach, minutach, sekundach [d, m, s]
+        
+        """     
+        dd = np.rad2deg(rad)
+        dd = dd
+        deg = int(np.trunc(dd))
+        mnt = int(np.trunc((dd-deg) * 60))
+        sec = ((dd-deg) * 60 - mnt) * 60
+        dms = [deg, mnt, round(sec, 5)]
+        
+        return(dms)
 
     
 if __name__ == "__main__":
