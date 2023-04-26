@@ -334,8 +334,50 @@ class Transformation:
             
             return(x92, y92)
 
-
-
+    def u92u00_2_GK(X, Y):
+        """   
+        Funkcja przelicza współrzędne układu 1992 lub układu 1992  
+        na współrzędne Gaussa - Krugera.
+        
+        Parameters
+        -------
+        X    : [float] : współrzędna w układzie 1992/2000 [m]
+        Y    : [float] : współrzędna w układzie 1992/2000 [m]
+          
+        Returns
+        -------
+        xGK  : [float] : współrzędna w układzie Gaussa - Krugera 
+        yGK  : [float] : współrzędna w układzie Gaussa - Krugera 
+        lam0 : [float] : południk osiowy [rad] 
+        m    : [float] : elemntarna skala długości [niemianowana]
+        
+        """     
+        if X < 1000000 and Y < 1000000:
+            m92 = 0.9993
+            xGK = (X + 5300000)/m92
+            yGK = (Y - 500000)/m92
+            l0 = math.radians(19)
+            m = m92
+            
+        elif X > 1000000 and Y > 1000000:
+            if Y > 5000000 and Y < 6000000:
+                s = 5
+                l0 = math.radians(15)
+            elif Y > 6000000 and Y < 7000000:
+                s = 6
+                l0 =  math.radians(18)
+            elif Y > 7000000 and Y < 8000000:
+                s = 7
+                l0 =  math.radians(21)
+            elif Y > 8000000 and Y < 9000000:
+                s = 8
+                l0 =  math.radians(24)
+            m00 = 0.999923
+            xGK = X/m00
+            yGK = (Y - (s * 1000000) - 500000)/m00
+            m = m00
+            
+        return(xGK, yGK, l0, m)
 
 
 
