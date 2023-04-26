@@ -432,10 +432,29 @@ class Transformation:
         l = l0 + lam
         
         return(f, l)
-
-
-
-
+    
+    def u1992_u2000_2_flh(X, Y, self):
+        """   
+        Funkcja przelicza współrzędne układu 1992 lub układu 2000  
+        na współrzędne geodezyjne.
+        
+        Parameters
+        -------
+        X   : [float] : współrzędna w układzie 1992/2000 [m]
+        Y   : [float] : współrzędna w układzie 1992/2000 [m]
+        a   : [float] : dłuższa półoś elipsoidy [m]
+        e2  : [float] : mimośrod elipsoidy [niemianowana]
+        
+        Returns
+        -------
+        fi  : [float] : szerokość geodezyjna [rad]
+        lam : [float] : długość geodezyjna [rad]
+        
+        """     
+        xGK, yGK, lam0, m = self.u92u00_2_GK(X, Y)
+        f, l = self.GK_2_flh(xGK, yGK, m, l0, self.e2, self.a)
+        
+        return(f, l)
 
     
 if __name__ == "__main__":
