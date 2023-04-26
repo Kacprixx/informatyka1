@@ -7,57 +7,30 @@ def Np(f, self):
         N = self.a / np.sqrt(1 - self.e2 * np.sin(f)**2)
         return(N) 
 
-   
-def Rneu(f, l):
-    R = np.array([[-np.sin(f) * np.cos(l), -np.sin(l), np.cos(f) * np.cos(l)],
-                  [-np.sin(f) * np.sin(l), np.cos(l) , np.cos(f) * np.sin(l)],
-                  [np.cos(f)             ,      0.   , np.sin(f)]])     
-    return(R)
-
-def XYZ2neu(dX, f, l):
-    R = Rneu(f, l)
-    return(R.T @ dX )
-
-def GaussKruger(f,l,l0,a,e2):
-    a2 = a**2
-    b2 = a2 * (1 - e2)
-    e_2 = (a2 - b2)/b2
-    dl = l - l0
-    dl2 = dl**2
-    dl4 = dl**4
-    t = tan(f)
-    t2 = t**2
-    t4 = t**4
-    n2 = e_2 * (cos(f)**2)
-    n4 = n2 ** 2
-    N = Np(f,a,e2)
-    e4 = e2**2
-    e6 = e2**3
-    A0 = 1 - (e2/4) - ((3*e4)/64) - ((5*e6)/256)
-    A2 = (3/8) * (e2 + e4/4 + (15*e6)/128)
-    A4 = (15/256) * (e4 + (3*e6)/4)
-    A6 = (35*e6)/3072
-    sigma = a * ((A0 * f) - A2 * sin(2*f) + A4 * sin(4*f) - A6 * sin(6*f))
-    xgk = sigma + ((dl**2)/2) * N * sin(f) * cos(f) * (1 + ((dl**2)/12)*(cos(f)**2)*(5 - t2 + 9 * n2 + 4 * n4) + (dl4/360) * (cos(f)**4)*(61 - (58 * t2) + t4 + (270 * n2) - (330 * n2 * t2)))
-    ygk = dl * N * cos(f) * (1 + (dl2/6) * (cos(f)**2) * (1 - t2 + n2) + (dl4/120) * (cos(f)**4) * (5 - (18 * t2) + t4 + (14 * n2) - 58 * n2 * t2))
-    return(xgk,ygk)
-
-def GK2PL1992(xgk,ygk):
-    x_92 = xgk * 0.9993 - 5300000
-    y_92 = ygk * 0.9993 + 500000
-    return(x_92, y_92)
-
-def GK2PL2000(xgk,ygk,l0):
-    strefa = int(l0 * 180/pi)/3
-    x_00 = xgk * 0.999923
-    y_00 = ygk * 0.999923 + strefa * 1000000 + 500000
-    return(x_00, y_00)
-
 
 
 o = object()
 
 class Transformation:
+    def Np(f, self):
+        '''
+        liczy promien krzywizny w I wertykale 
+
+        Parameters
+        ----------
+        f : float
+            szerokosc geodezyjna [radiany]
+        
+
+        Returns
+        -------
+        N : float
+            promien krzywizny w I wertykale [m]
+
+        '''
+        N = self.a / np.sqrt(1 - self.e2 * np.sin(f)**2)
+        return(N)
+    
     def __init__(self, model: str = "grs80"):
         '''       
         Wykorzystywane Parametry elipsoid
@@ -86,25 +59,7 @@ class Transformation:
         self.e = sqrt(2 * self.flat - self.flat ** 2) # mimosrod
         self.e2 = (2 * self.flat - self.flat ** 2)    # mimosrod^2  
         
-        
-    def Np(f, self):
-        '''
-        liczy promien krzywizny w I wertykale 
-
-        Parameters
-        ----------
-        f : float
-            szerokosc geodezyjna [radiany]
-        
-
-        Returns
-        -------
-        N : float
-            promien krzywizny w I wertykale [m]
-
-        '''
-        N = self.a / np.sqrt(1 - self.e2 * np.sin(f)**2)
-        return(N) 
+         
         
     def XYZ2flh(self,X,Y,Z):
         '''
