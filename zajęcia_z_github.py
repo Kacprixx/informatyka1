@@ -456,32 +456,7 @@ class Transformation:
         
         return(f, l)
 
-    def az_el(N, E, U):
-        """   
-        wyznaczenie kata azymutu i kata elewacji na 
-        podstawie wspolrzednych topocentrycznych 
-        
-        Parameters
-        -------
-        N  : [float] 
-            wpolrzedna topocentryczna N (north) [m]
-        E  : [float] 
-            wpolrzedna topocentryczna E (east) [m]
-        U  : [float] 
-            wpolrzedna topocentryczna U (up) [m] 
-       
-        Returns
-        -------
-        Az : [float] 
-            azymut [radiany]
-        el : [float] 
-            kat elewacji [radiany]
-        
-        """  
-        Az = math.atan2(E, N)
-        el = math.arcsin(U/math.sqrt(N**2 + E**2 + U**2))
-        
-        return(Az, el)
+    
 
     
 if __name__ == "__main__":
