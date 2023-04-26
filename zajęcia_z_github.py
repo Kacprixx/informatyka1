@@ -246,43 +246,42 @@ class Transformation:
          y00 : [float] : współrzędna w układzie 2000 [m]
      
          """
-         m = 0.999923
+        m = 0.999923
     
-         N = self.a/np.sqrt(1-self.e2*np.sin(f)**2)
-         e2p = self.e2/(1-self.e2)
-         t = np.arctan(f)
-         n2 = e2p * (np.cos(f))**2
-         l = np.degrees(l)
+        N = self.a/np.sqrt(1-self.e2*np.sin(f)**2)
+        e2p = self.e2/(1-self.e2)
+        t = np.arctan(f)
+        n2 = e2p * (np.cos(f))**2
+        l = np.degrees(l)
     
-         if (l.all() > 13.5 and l.all()) < 16.5:
-             s = 5
-             l0 = 15
-         elif (l.all() > 16.5 and l.all() < 19.5):
-             s = 6
-             l0 = 18
-         elif (l.all() > 19.5 and l.all() < 22.5):
-             s = 7
-             l0 = 21
-         elif (l.all() > 22.5 and l.all() < 25.5):
-             s = 8
-             l0 = 24
+        if (l.all() > 13.5 and l.all()) < 16.5:
+            s = 5
+            l0 = 15
+        elif (l.all() > 16.5 and l.all() < 19.5):
+            s = 6  
+            l0 = 18
+        elif (l.all() > 19.5 and l.all() < 22.5):
+            s = 7
+            l0 = 21
+        elif (l.all() > 22.5 and l.all() < 25.5):
+            s = 8
+            l0 = 24
     
-         l = np.radians(l)
-         l0 = np.radians(l0)
-         lam = l - l0
+        l = np.radians(l)
+        l0 = np.radians(l0)
+        lam = l - l0
+        A0 = 1 - (self.e2/4) - ((3*(self.e2**2))/64) - ((5*(self.e2**3))/256)
+        A2 = (3/8) * (self.e2 + ((self.e2**2)/4) + ((15 * (self.e2**3))/128))
+        A4 = (15/256) * (self.e2**2 + ((3*(self.e2**3))/4))
+        A6 = (35 * (self.e2**3))/3072
     
-         A0 = 1 - (self.e2/4) - ((3*(self.e2**2))/64) - ((5*(self.e2**3))/256)
-         A2 = (3/8) * (self.e2 + ((self.e2**2)/4) + ((15 * (self.e2**3))/128))
-         A4 = (15/256) * (self.e2**2 + ((3*(self.e2**3))/4))
-         A6 = (35 * (self.e2**3))/3072
+        sig = self.a * ((A0*f) - (A2*np.sin(2*f)) + (A4*np.sin(4*f)) - (A6*np.sin(6*f)))
+        x = sig + ((lam**2)/2) * (N*np.sin(f)*np.cos(f)) * (1 + ((lam**2)/12) * ((np.cos(f))**2) * (5 - t**2 + 9*n2 + 4*(n2**2)) + ((lam**4)/360) * ((np.cos(f))**4) * (61 - (58*(t**2)) + (t**4) + (270*n2) - (330 * n2 * (t**2))))
+        y = l * (N*np.cos(f)) * (1 + ((((l**2)/6) * (np.cos(f))**2) * (1-(t**2) + n2)) + (((l**4)/(120)) * (np.cos(f)**4)) * (5 - (18 * (t**2)) + (t**4) + (14*n2) - (58*n2*(t**2))))
     
-         sig = self.a * ((A0*f) - (A2*np.sin(2*f)) + (A4*np.sin(4*f)) - (A6*np.sin(6*f)))
-         x = sig + ((lam**2)/2) * (N*np.sin(f)*np.cos(f)) * (1 + ((lam**2)/12) * ((np.cos(f))**2) * (5 - t**2 + 9*n2 + 4*(n2**2)) + ((lam**4)/360) * ((np.cos(f))**4) * (61 - (58*(t**2)) + (t**4) + (270*n2) - (330 * n2 * (t**2))))
-         y = l * (N*np.cos(f)) * (1 + ((((l**2)/6) * (np.cos(f))**2) * (1-(t**2) + n2)) + (((l**4)/(120)) * (np.cos(f)**4)) * (5 - (18 * (t**2)) + (t**4) + (14*n2) - (58*n2*(t**2))))
-    
-         x00 = m * x
-         y00 = m * y + (s*1000000) + 500000
-         return(x00, y00)
+        x00 = m * x
+        y00 = m * y + (s*1000000) + 500000
+        return(x00, y00)
 
 
 
