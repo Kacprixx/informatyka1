@@ -202,12 +202,11 @@ class Transformation:
          y00 : [float] : współrzędna w układzie 2000 [m]
      
          """
-        #f = flh2XYZ()  
-        a = self.a
-        e2 = self.e2
+       
+    
         m = 0.999923
     
-        N = self.a / sqrt(1 - self.e2 * sin(f)**2)
+        N = self.a / (sqrt(1 - self.e2 * sin(f)**2))
         e2p = self.e2/(1-self.e2)
         t = np.arctan(f)
         n2 = e2p * (np.cos(f))**2
@@ -440,16 +439,21 @@ class Transformation:
 
     
 if __name__ == "__main__":
-    #tworze obiekt
+    # utworzenie obiektu
     geo = Transformation(model = "wgs84")
-    #wsp geocentryczne 
+    # dane XYZ geocentryczne
     X = 3664940.500; Y = 1409153.590; Z = 5009571.170
-    f1, l1 , h = geo.XYZ2flh(X, Y, Z)
-    f = f1 * 180 / pi 
-    l = l1 * 180 / pi
-    x_00, y_00, z_00 = geo.ukl2000(f, l)
-    print(x_00, y_00, z_00)
+    
+    f1, l1, h = geo.XYZ2flh(X, Y, Z)
+    f = f1 / pi *180
+    l = l1 / pi * 180
     print(f, l, h)
+    
+    x_00, y_00 = geo.ukl2000(f, l)
+    
+    
+    # phi, lam, h = geo.xyz2plh2(X, Y, Z)
+    # print(phi, lam, h)
 
 
 
@@ -458,6 +462,7 @@ if __name__ == "__main__":
 
 
 
+        
 
 
 
