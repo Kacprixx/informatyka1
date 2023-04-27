@@ -66,7 +66,7 @@ class Transformation:
         p = np.sqrt(X**2 + Y**2)
         f = np.arctan(Z / (p * (1 - self.e2)))
         while True:
-            N = Np(f,self)
+            N = self.a / np.sqrt(1 - self.e2 * np.sin(f)**2)
             h = (p/np.cos(f)) - N
             fp = f    #f poprzednie 
             f = np.arctan(Z/(p*(1 - self.e2 * N/ (N +h))))
