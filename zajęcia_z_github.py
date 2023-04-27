@@ -3,12 +3,10 @@ from math import *
 import numpy as np
 
 
-def Np(f, self):
-        N = self.a / np.sqrt(1 - self.e2 * np.sin(f)**2)
-        return(N) 
+
 
     
-o = object()
+#o = object()
 
 class Transformation:
     def __init__(self, model: str = "grs80"):
@@ -82,62 +80,6 @@ class Transformation:
         return(f,l,h)
     
    
-    
-    
-    def Np(f, self):
-        '''
-        liczy promien krzywizny w I wertykale 
-
-        Parameters
-        ----------
-        f : float
-            szerokosc geodezyjna [radiany]
-        
-
-        Returns
-        -------
-        N : float
-            promien krzywizny w I wertykale [m]
-
-        '''
-        N = self.a / np.sqrt(1 - self.e2 * np.sin(f)**2)
-        return(N)
-    
-    
-    def flh2XYZ(f, l, h, self):
-        '''
-        przeliczane wspolrzednych geodezyjnych 
-        na wspolrzedne geocentryczne 
-
-        Parameters
-        ----------
-        f : float
-            szerokosc geodezyjna [radiany]
-        l : float
-            dlugosc geodezyjna [radiany]
-        h : float
-            wysokosc elipsoidalna [m]
-        a : float
-            dluzsza polos elipsoidy [m]
-        e2: float
-            mimosrod elipsoidy [niemianowane]
-
-        Returns
-        -------
-        X : float
-            wspolrzedna geocentryczna [m]
-        Y : float
-            wspolrzedna geocentryczna [m]
-        Z : float
-            wspolrzedna geocentryczna [m]
-
-        '''
-        N = Np(f, self)
-        X = (N + h) * np.cos(f) * np.cos(l)
-        Y = (N + h) * np.cos(f) * np.sin(l)
-        Z = (N * (1 - self.e2) + h) * np.sin(f)
-        return(X, Y, Z)
-    
     
     def XYZ_neu(self, x, y, z):
         """   
@@ -300,151 +242,6 @@ class Transformation:
             
         return(x92, y92)
 
-
-    def u92u00_2_GK(X, Y):
-        """   
-        Funkcja przelicza współrzędne układu 1992 lub układu 1992  
-        na współrzędne Gaussa - Krugera.
-        
-        Parameters
-        -------
-        X    : [float] : współrzędna w układzie 1992/2000 [m]
-        Y    : [float] : współrzędna w układzie 1992/2000 [m]
-          
-        Returns
-        -------
-        xGK  : [float] : współrzędna w układzie Gaussa - Krugera 
-        yGK  : [float] : współrzędna w układzie Gaussa - Krugera 
-        lam0 : [float] : południk osiowy [rad] 
-        m    : [float] : elemntarna skala długości [niemianowana]
-        
-        """     
-        if X < 1000000 and Y < 1000000:
-            m92 = 0.9993
-            xGK = (X + 5300000)/m92
-            yGK = (Y - 500000)/m92
-            l0 = math.radians(19)
-            m = m92
-            
-        elif X > 1000000 and Y > 1000000:
-            if Y > 5000000 and Y < 6000000:
-                s = 5
-                l0 = math.radians(15)
-            elif Y > 6000000 and Y < 7000000:
-                s = 6
-                l0 =  math.radians(18)
-            elif Y > 7000000 and Y < 8000000:
-                s = 7
-                l0 =  math.radians(21)
-            elif Y > 8000000 and Y < 9000000:
-                s = 8
-                l0 =  math.radians(24)
-            m00 = 0.999923
-            xGK = X/m00
-            yGK = (Y - (s * 1000000) - 500000)/m00
-            m = m00
-            
-        return(xGK, yGK, l0, m)
-
-    def GK_2_flh(xGK, yGK, m, l0, self):    
-        """   
-        przeliczenie wspolrzednych z ukladu Gaussa-Krugera
-        na wspolrzedne geodezyjne 
-        
-        Parameters
-        -------
-        xGK  : [float] 
-                wspolrzedna w ukladzie Gaussa - Krugera 
-        yGK  : [float] 
-                wspolrzedna w ukladzie Gaussa - Krugera 
-        l0 : [float] 
-                poludnik osiowy [radiany] 
-        m    : [float] 
-                elemntarna skala długości [niemianowana]
-        a    : [float] 
-                dluzsza polos elipsoidy [m]
-        e2   : [float] 
-                mimosrod elipsoidy [niemianowana]
-          
-        Returns
-        -------
-        f   : [float] 
-                szerokosc geodezyjna [radiany]
-        l  : [float] 
-                dlugosc geodezyjna [radiany]
-        
-        """  
-        A0 = 1 - (self.e2/4) - (3*(self.e2**2))/64 - (5*(self.e2**3))/256
-        A2 = 3/8 * (self.e2 + ((self.e2**2)/4) + ((15*(self.e2**3))/128))
-        A4 = 15/256 * ((self.e2**2) + (3*(self.e2**3))/4)
-        A6 = (35*(self.e2**3))/3072
-        eps = 0.000001/3600 *math.pi/180
-        b1 = xGK/(self.a * A0)
-        
-        while True:
-            b0 = b1
-            b1= (xGK/(self.a * A0 )) + ((A2/A0) * math.sin(2*b0)) - ((A4/A0) * math.sin(4*b0)) + ((A6/A0) * math.sin(6*b0))
-            b = b1
-            if math.fabs(b1 - b0) <= eps:
-                break
-            
-        e_2 = self.e2/(1-self.e2)
-        N = self.a/math.sqrt(1 - self.e2 * math.sin(b)**2)
-        t = math.tan(b)
-        n2 = e_2 * math.cos(b)**2
-        
-        fi = b - (t/2) * (((yGK/(N))**2) * (1 + n2) - (1/12) * ((yGK/( N))**4) * (5 + (3 * t**2) + (6*n2) - (6 * n2 * t**2) - (3 * n2**2) - (9 * t**2 * n2**2)) + (1/360) * ((yGK/(N))**6) * (61 + (90 * t**2) + (45 * t**4) + (107 * n2) - (162 * t**2 * n2) - (45 * (t**4) * n2)))
-        lam = (1/math.cos(b)) * ((yGK/(N)) - ((1/6) * (yGK/(N))**3 * (1 + 2 * t**2 + n2)) + ((1/120) * (yGK/( N))**5 * (5 + (28 * t**2) + (24 * t**4) + (6 * n2) + (8 * n2 * t**2))))
-        l = l0 + lam
-        
-        return(f, l)
-    
-    def u1992_u2000_2_flh(X, Y, self):
-        """   
-        Funkcja przelicza współrzędne układu 1992 lub układu 2000  
-        na współrzędne geodezyjne.
-        
-        Parameters
-        -------
-        X   : [float] : współrzędna w układzie 1992/2000 [m]
-        Y   : [float] : współrzędna w układzie 1992/2000 [m]
-        a   : [float] : dłuższa półoś elipsoidy [m]
-        e2  : [float] : mimośrod elipsoidy [niemianowana]
-        
-        Returns
-        -------
-        fi  : [float] : szerokość geodezyjna [rad]
-        lam : [float] : długość geodezyjna [rad]
-        
-        """     
-        xGK, yGK, lam0, m = self.u92u00_2_GK(X, Y)
-        f, l = self.GK_2_flh(xGK, yGK, m, l0, self.e2, self.a)
-        
-        return(f, l)
-
-    def rad2dms(rad):
-        """   
-        przeliczenie wartosci katow z radianow na stopnie 
-        
-        Parameters
-        -------
-        rad : [float] 
-            kat w radianach [radiany]
-       
-        Returns
-        -------
-        dms : [list] 
-            kat w stopniach, minutach, sekundach [d, m, s]
-        
-        """     
-        dd = np.rad2deg(rad)
-        dd = dd
-        deg = int(np.trunc(dd))
-        mnt = int(np.trunc((dd-deg) * 60))
-        sec = ((dd-deg) * 60 - mnt) * 60
-        dms = [deg, mnt, round(sec, 5)]
-        
-        return(dms)
 
     
 if __name__ == "__main__":
