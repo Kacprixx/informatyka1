@@ -202,9 +202,12 @@ class Transformation:
          y00 : [float] : współrzędna w układzie 2000 [m]
      
          """
+        #f = flh2XYZ()  
+        a = self.a
+        e2 = self.e2
         m = 0.999923
     
-        N = self.a/np.sqrt(1-self.e2*np.sin(f)**2)
+        N = self.a / sqrt(1 - self.e2 * sin(f)**2)
         e2p = self.e2/(1-self.e2)
         t = np.arctan(f)
         n2 = e2p * (np.cos(f))**2
@@ -444,6 +447,8 @@ if __name__ == "__main__":
     f1, l1 , h = geo.XYZ2flh(X, Y, Z)
     f = f1 * 180 / pi 
     l = l1 * 180 / pi
+    x_00, y_00, z_00 = geo.ukl2000(f, l)
+    print(x_00, y_00, z_00)
     print(f, l, h)
 
 
