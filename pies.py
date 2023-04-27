@@ -119,44 +119,64 @@ class Transformation:
         return(f,l,h)
 
     def XY_2000(self, x, y, z):
-            a = self.a
-            e2 = self.e2
-            f = self.XYZ2flh(x,y,z)[0]
-            l = self.XYZ2flh(x,y,z)[1]
-            if abs(degrees(l) - 15) <= 1.5:
-                l0_deg = 15
-            elif abs(degrees(l) - 18) < 1.5:
-                l0_deg = 18
-            elif abs(degrees(l) - 21) <= 1.5:
-                l0_deg = 21
-            else:
-                l0_deg = 24
-            l0 = radians(l0_deg)
-            a2 = a**2
-            b2 = a2 * (1 - e2)
-            e_2 = (a2 - b2)/b2
-            dl = l - l0
-            dl2 = dl**2
-            dl4 = dl**4
-            t = tan(f)
-            t2 = t**2
-            t4 = t**4
-            n2 = e_2 * (cos(f)**2)
-            n4 = n2 ** 2
-            N = self.a / sqrt(1 - self.e2 * sin(f)**2)
-            e4 = e2**2
-            e6 = e2**3
-            A0 = 1 - (e2/4) - ((3*e4)/64) - ((5*e6)/256)
-            A2 = (3/8) * (e2 + e4/4 + (15*e6)/128)
-            A4 = (15/256) * (e4 + (3*e6)/4)
-            A6 = (35*e6)/3072
-            sigma = a * ((A0 * f) - A2 * sin(2*f) + A4 * sin(4*f) - A6 * sin(6*f))
-            xgk = sigma + ((dl**2)/2) * N * sin(f) * cos(f) * (1 + ((dl**2)/12)*(cos(f)**2)*(5 - t2 + 9 * n2 + 4 * n4) + (dl4/360) * (cos(f)**4)*(61 - (58 * t2) + t4 + (270 * n2) - (330 * n2 * t2)))
-            ygk = dl * N * cos(f) * (1 + (dl2/6) * (cos(f)**2) * (1 - t2 + n2) + (dl4/120) * (cos(f)**4) * (5 - (18 * t2) + t4 + (14 * n2) - 58 * n2 * t2))
-            strefa = int(l0 * 180/pi)/3
-            x_00 = xgk * 0.999923
-            y_00 = ygk * 0.999923 + strefa * 1000000 + 500000
-            return x_00, y_00
+        '''
+        
+
+        Parameters
+        ----------
+        x : float
+            wspolrzedna geocentryczna [m]
+        y : float
+            wspolrzedna geocentryczna [m]
+        z : float
+            wspolrzedna geocentryczna [m]
+
+        Returns
+        -------
+        x_00 : float
+            wspolrzedna geocentryczna w ukladzie PL-2000 [m]
+        y_00 : float
+            wspolrzedna geocentryczna w ukladzie PL-2000 [m]
+
+        '''
+        a = self.a
+        e2 = self.e2
+        f = self.XYZ2flh(x,y,z)[0]
+        l = self.XYZ2flh(x,y,z)[1]
+        if abs(degrees(l) - 15) <= 1.5:
+            l0_deg = 15
+        elif abs(degrees(l) - 18) < 1.5:
+            l0_deg = 18
+        elif abs(degrees(l) - 21) <= 1.5:
+            l0_deg = 21
+        else:
+            l0_deg = 24
+        l0 = radians(l0_deg)
+        a2 = a**2
+        b2 = a2 * (1 - e2)
+        e_2 = (a2 - b2)/b2
+        dl = l - l0
+        dl2 = dl**2
+        dl4 = dl**4
+        t = tan(f)
+        t2 = t**2
+        t4 = t**4
+        n2 = e_2 * (cos(f)**2)
+        n4 = n2 ** 2
+        N = self.a / sqrt(1 - self.e2 * sin(f)**2)
+        e4 = e2**2
+        e6 = e2**3
+        A0 = 1 - (e2/4) - ((3*e4)/64) - ((5*e6)/256)
+        A2 = (3/8) * (e2 + e4/4 + (15*e6)/128)
+        A4 = (15/256) * (e4 + (3*e6)/4)
+        A6 = (35*e6)/3072
+        sigma = a * ((A0 * f) - A2 * sin(2*f) + A4 * sin(4*f) - A6 * sin(6*f))
+        xgk = sigma + ((dl**2)/2) * N * sin(f) * cos(f) * (1 + ((dl**2)/12)*(cos(f)**2)*(5 - t2 + 9 * n2 + 4 * n4) + (dl4/360) * (cos(f)**4)*(61 - (58 * t2) + t4 + (270 * n2) - (330 * n2 * t2)))
+        ygk = dl * N * cos(f) * (1 + (dl2/6) * (cos(f)**2) * (1 - t2 + n2) + (dl4/120) * (cos(f)**4) * (5 - (18 * t2) + t4 + (14 * n2) - 58 * n2 * t2))
+        strefa = int(l0 * 180/pi)/3
+        x_00 = xgk * 0.999923
+        y_00 = ygk * 0.999923 + strefa * 1000000 + 500000
+        return x_00, y_00
         
     
     def XY_1992(self, x, y, z):
@@ -166,10 +186,12 @@ class Transformation:
             
             Parameters
             -------
-            f  : [float] 
-                  szerokosc geodezyjna [rad]
-            l : [float] 
-                  długosc geodezyjna [rad]
+            x : float
+                wspolrzedna geocentryczna [m]
+            y : float
+                wspolrzedna geocentryczna [m]
+            z : float
+                wspolrzedna geocentryczna [m]
             a : [float] 
                   dluzsza polos elipsoidy [m]
             e2: [float] 
@@ -178,9 +200,9 @@ class Transformation:
             Returns
             -------
             x92 : [float] 
-                  wspolrzedna w ukladzie 1992 [m]
+                  wspolrzedna w ukladzie PL-1992 [m]
             y92 : [float]  
-                  wspolrzedna w ukladzie 1992 [m]  
+                  wspolrzedna w ukladzie PL-1992 [m]  
             
             """ 
             a = self.a
@@ -217,22 +239,24 @@ class Transformation:
     
         Parameters
         -------
-        fl1 : [list]  
-             wpolrzedne geodezyjne punktu poczatkowego [radiany]
-        fl2 : [list]  
-             wpolrzedne geodezyjne punktu koncowego [radiany]
-        a   : [float] 
-             dluzsza polos elipsoidy [m]
-        e2  : [float] 
-             mimosrod elipsoidy [niemianowana]
+        x : float
+            wspolrzedna geocentryczna [m]
+        y : float
+            wspolrzedna geocentryczna [m]
+        z : float
+            wspolrzedna geocentryczna [m]
+        a : float 
+            dluzsza polos elipsoidy [m]
+        e2: float 
+            mimosrod elipsoidy [niemianowana]
       
         Returns
         -------
-        N : [float] 
+        N : float 
             wpolrzedna topocentryczna N (north) [m]
-        E : [float] 
+        E : float 
             wpolrzedna topocentryczna E (east) [m]
-        U : [float] 
+        U : float 
             wpolrzedna topocentryczna U (up) [m]
     
         """ 
