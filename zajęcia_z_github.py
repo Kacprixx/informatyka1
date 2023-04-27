@@ -311,7 +311,7 @@ plik=open("wyniki.txt","w")
 plik.write(f'Współrzędne FLH, PL_1992, PL_2000, NEU stacji permanentnej GNSS \n')
 plik.write(f'Obserwatorium Astronomiczno-Geodezyjne w Józefosławiu \n')
 plik.write(f'# ************************************* \n')
-plik.write(f'# BLH**********************************\n')
+plik.write(f'# BLH **********************************\n')
 plik.write(f'  B[d]         L[d]         H[m] \n')
 plik.write(f'# ************************************* \n')
 for A,B,C in zip(F,L,H):
@@ -322,7 +322,7 @@ for A,B,C in zip(F,L,H):
     
   
 plik.write(f'# ************************************* \n')
-plik.write(f'# PL-2000************************************* \n')
+plik.write(f'# PL_2000 ************************************* \n')
 plik.write(f'  X[m]         Y[m] \n')
 plik.write(f'# ************************************* \n')
 for A,B in zip(X_00,Y_00):
@@ -331,7 +331,7 @@ for A,B in zip(X_00,Y_00):
     plik.write(f'{A},   {B} \n')
     
 plik.write(f'# ************************************* \n')
-plik.write(f'# PL-1992************************************* \n')
+plik.write(f'# PL_1992 ************************************* \n')
 plik.write(f'  X[m]         Y[m] \n')
 plik.write(f'# ************************************* \n')
 for A,B in zip(X_92,Y_92):
@@ -340,7 +340,7 @@ for A,B in zip(X_92,Y_92):
     plik.write(f'{A},   {B} \n')
 
 plik.write(f'# ************************************* \n')
-plik.write(f'# NEU************************************* \n')
+plik.write(f'# NEU ************************************* \n')
 plik.write(f'  N[m]         E[m]         U[m] \n')
 plik.write(f'# ************************************* \n')
 
