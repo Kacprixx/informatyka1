@@ -184,7 +184,7 @@ class Transformation:
 
     
 
-    def ukl2000(f, l, self):
+    def ukl2000(self, x, y, z):
         """   
         Funkcja przelicza współrzędne geodezyjne  
          na współrzędne układu 2000.
@@ -202,42 +202,23 @@ class Transformation:
          y00 : [float] : współrzędna w układzie 2000 [m]
      
          """
-        m = 0.999923
-    
-        N = self.a/np.sqrt(1-self.e2*np.sin(f)**2)
-        e2p = self.e2/(1-self.e2)
-        t = np.arctan(f)
-        n2 = e2p * (np.cos(f))**2
-        l = np.degrees(l)
-    
-        if (l.all() > 13.5 and l.all()) < 16.5:
-            s = 5
-            l0 = 15
-        elif (l.all() > 16.5 and l.all() < 19.5):
-            s = 6  
-            l0 = 18
-        elif (l.all() > 19.5 and l.all() < 22.5):
-            s = 7
-            l0 = 21
-        elif (l.all() > 22.5 and l.all() < 25.5):
-            s = 8
-            l0 = 24
-    
-        l = np.radians(l)
-        l0 = np.radians(l0)
-        lam = l - l0
-        A0 = 1 - (self.e2/4) - ((3*(self.e2**2))/64) - ((5*(self.e2**3))/256)
-        A2 = (3/8) * (self.e2 + ((self.e2**2)/4) + ((15 * (self.e2**3))/128))
-        A4 = (15/256) * (self.e2**2 + ((3*(self.e2**3))/4))
-        A6 = (35 * (self.e2**3))/3072
-    
-        sig = self.a * ((A0*f) - (A2*np.sin(2*f)) + (A4*np.sin(4*f)) - (A6*np.sin(6*f)))
-        x = sig + ((lam**2)/2) * (N*np.sin(f)*np.cos(f)) * (1 + ((lam**2)/12) * ((np.cos(f))**2) * (5 - t**2 + 9*n2 + 4*(n2**2)) + ((lam**4)/360) * ((np.cos(f))**4) * (61 - (58*(t**2)) + (t**4) + (270*n2) - (330 * n2 * (t**2))))
-        y = l * (N*np.cos(f)) * (1 + ((((l**2)/6) * (np.cos(f))**2) * (1-(t**2) + n2)) + (((l**4)/(120)) * (np.cos(f)**4)) * (5 - (18 * (t**2)) + (t**4) + (14*n2) - (58*n2*(t**2))))
-    
-        x00 = m * x
-        y00 = m * y + (s*1000000) + 500000
-        return(x00, y00)
+        a = self.a
+        e2 = self.e2
+        f = self.XYZ2flh(x, y, z)[0]
+        l = self.XYZ2flh(x, y, z)[1]
+        
+        
+        def GaussKruger(fa, la, L0, a, e2):
+            b = a*(sqrt(1-e2))
+            e2 = ((a)**2-(b)**2)/((b)**2)
+            t = np.tan(fa)
+            eta2 = (e2)*((np.cos(fa))**2)
+            dl = la-L0
+            N = Np(fa, a, e2)
+            sigma1 = sigma(e2, a, fa)
+            Xgk = sigma1+((dl**2)/2)*N*(sin(fa))*(cos(fa))*(1+((dl**2)/12)*((cos(fa))**2)*(5-(t**2)+9*(eta2)+4*(eta2)**2)+((dl**4)/360)*((cos(fa))**4)*(61-58*(t**2)+(t**4)+270*(eta2)-330*(eta2)*(t**2)))
+            Ygk = dl*N*(cos(fa))*(1+((dl**2)/6)*((cos(fa))**2)*(1-t**2+eta2)+((dl**4)/120)*((cos(fa))**4)*(5-18*(t**2)+(t**4)+14*eta2-58*(eta2)*(t**2)))
+            return(Xgk, Ygk)
 
 
 
@@ -441,10 +422,10 @@ if __name__ == "__main__":
     geo = Transformation(model = "wgs84")
     #wsp geocentryczne 
     X = 3664940.500; Y = 1409153.590; Z = 5009571.170
-    f1, l1 , h = geo.XYZ2flh(X, Y, Z)
-    f = f1 * 180 / pi 
-    l = l1 * 180 / pi
-    print(f, l, h)
+    x, y = geo.ukl2000(X, Y, Z)
+    #f = f1 * 180 / pi 
+    #l = l1 * 180 / pi
+    print(x, y)
 
 
 
