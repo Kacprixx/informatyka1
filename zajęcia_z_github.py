@@ -184,59 +184,65 @@ class Transformation:
 
     
 
-    def ukl2000(self, x, y, z):
-        """   
-        Funkcja przelicza współrzędne geodezyjne  
-         na współrzędne układu 2000.
-     
-         Parameters
-         -------
-         fi  :  float] : szerokość geodezyjna [rad]
-         lam : [float] : długość geodezyjna [rad]
-         a   : [float] : dłuższa półoś elipsoidy [m]
-         e2  : [float] : mimośrod elipsoidy [niemianowana]
-     
-         Returns
-         -------
-         x00 : [float] : współrzędna w układzie 2000 [m]
-         y00 : [float] : współrzędna w układzie 2000 [m]
-     
-         """
+    def XY_2000(self, x, y, z):
+        '''
+        
+
+        Parameters
+        ----------
+        x : float
+            wspolrzedna geocentryczna [m]
+        y : float
+            wspolrzedna geocentryczna [m]
+        z : float
+            wspolrzedna geocentryczna [m]
+
+        Returns
+        -------
+        x_00 : float
+            wspolrzedna geocentryczna w ukladzie PL-2000 [m]
+        y_00 : float
+            wspolrzedna geocentryczna w ukladzie PL-2000 [m]
+
+        '''
         a = self.a
         e2 = self.e2
-        f = self.XYZ2flh(x, y, z)[0]
-        l = self.XYZ2flh(x, y, z)[1]
-        if (l.all() > 13.5 and l.all()) < 16.5:
-            s = 5
-            l0 = 15
-        elif (l.all() > 16.5 and l.all() < 19.5):
-            s = 6
-            lam0 = 18
-        elif (l.all() > 19.5 and la.all() < 22.5):
-            s = 7
-            l0 = 21
-        elif (l.all() > 22.5 and l.all() < 25.5):
-            s = 8
-            l0 = 24
-
-        lam = np.radians(lam)
-        lam0 = np.radians(lam0)
-        l = lam - lam0
-    
-        b = self.a*(sqrt(1-e2))
-        e2 = ((self.a)**2-(b)**2)/((b)**2)
-        t = np.tan(fa)
-        eta2 = (self.e2)*((np.cos(fa))**2)
-        dl = la-L0
-        N = Np(fa,self)
-        A0 = 1 - (self.e2/4) - ((3*self.e2**2)/64) - ((5*self.e2**3)/256)
-        A2 = 3/8 * (self.e2 + ((self.e2**2)/4) + (15*self.e2**3)/128)
-        A4 = 15/256 * (self.e2**2 + (3*self.e2**3)/4)
-        A6 = (35*self.e2**3)/3072
-        sigma = self.a * (A0*fa - A2*np.sin(2*fa) + A4*np.sin(4*fa) - A6*np.sin(6*fa))
-        Xgk = sigma1+((dl**2)/2)*N*(sin(fa))*(cos(fa))*(1+((dl**2)/12)*((cos(fa))**2)*(5-(t**2)+9*(eta2)+4*(eta2)**2)+((dl**4)/360)*((cos(fa))**4)*(61-58*(t**2)+(t**4)+270*(eta2)-330*(eta2)*(t**2)))
-        Ygk = dl*N*(cos(fa))*(1+((dl**2)/6)*((cos(fa))**2)*(1-t**2+eta2)+((dl**4)/120)*((cos(fa))**4)*(5-18*(t**2)+(t**4)+14*eta2-58*(eta2)*(t**2)))
-        return(Xgk, Ygk)
+        f = self.XYZ2flh(x,y,z)[0]
+        l = self.XYZ2flh(x,y,z)[1]
+        if abs(degrees(l) - 15) <= 1.5:
+            l0_deg = 15
+        elif abs(degrees(l) - 18) < 1.5:
+            l0_deg = 18
+        elif abs(degrees(l) - 21) <= 1.5:
+            l0_deg = 21
+        else:
+            l0_deg = 24
+        l0 = radians(l0_deg)
+        a2 = a**2
+        b2 = a2 * (1 - e2)
+        e_2 = (a2 - b2)/b2
+        dl = l - l0
+        dl2 = dl**2
+        dl4 = dl**4
+        t = tan(f)
+        t2 = t**2
+        t4 = t**4
+        n2 = e_2 * (cos(f)**2)
+        n4 = n2 ** 2
+        N = self.a / sqrt(1 - self.e2 * sin(f)**2)
+        e4 = e2**2
+        e6 = e2**3
+        A0 = 1 - (e2/4) - ((3*e4)/64) - ((5*e6)/256)
+        A2 = (3/8) * (e2 + e4/4 + (15*e6)/128)
+        A4 = (15/256) * (e4 + (3*e6)/4)
+        A6 = (35*e6)/3072
+        sigma = a * ((A0 * f) - A2 * sin(2*f) + A4 * sin(4*f) - A6 * sin(6*f))
+        xgk = sigma + ((dl**2)/2) * N * sin(f) * cos(f) * (1 + ((dl**2)/12)*(cos(f)**2)*(5 - t2 + 9 * n2 + 4 * n4) + (dl4/360) * (cos(f)**4)*(61 - (58 * t2) + t4 + (270 * n2) - (330 * n2 * t2)))
+        ygk = dl * N * cos(f) * (1 + (dl2/6) * (cos(f)**2) * (1 - t2 + n2) + (dl4/120) * (cos(f)**4) * (5 - (18 * t2) + t4 + (14 * n2) - 58 * n2 * t2))
+        strefa = int(l0 * 180/pi)/3
+        x_00 = xgk * 0.999923
+        y_00 = ygk * 0.999923 + strefa * 1000000 + 500000
+        return x_00, y_00
 
 
 
