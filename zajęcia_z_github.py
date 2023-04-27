@@ -247,52 +247,59 @@ class Transformation:
 
 
 
-    def ukl1992(f, l, self):
-            """   
-            przeliczenie wszpolrzednych geodezyjnych 
-            na wspolrzedne ukladu 1992
+    
+    def XY_1992(self, x, y, z):
+        """   
+        przeliczenie wszpolrzednych geodezyjnych 
+        na wspolrzedne ukladu 1992
             
-            Parameters
-            -------
-            f  : [float] 
-                  szerokosc geodezyjna [rad]
-            l : [float] 
-                  długosc geodezyjna [rad]
-            a : [float] 
-                  dluzsza polos elipsoidy [m]
-            e2: [float] 
-                  mimosrod elipsoidy [niemianowana]
+        Parameters
+        -------
+        x : float
+            wspolrzedna geocentryczna [m]
+        y : float
+            wspolrzedna geocentryczna [m]
+        z : float
+            wspolrzedna geocentryczna [m]
+        a : [float] 
+            dluzsza polos elipsoidy [m]
+        e2: [float] 
+            mimosrod elipsoidy [niemianowana]
             
-            Returns
-            -------
-            x92 : [float] 
-                  wspolrzedna w ukladzie 1992 [m]
-            y92 : [float]  
-                  wspolrzedna w ukladzie 1992 [m]  
+        Returns
+        -------
+        x92 : [float] 
+            wspolrzedna w ukladzie PL-1992 [m]
+        y92 : [float]  
+            wspolrzedna w ukladzie PL-1992 [m]  
+        
+        """ 
+        a = self.a
+        e2 = self.e2
+        f = self.XYZ2flh(x,y,z)[0]
+        l = self.XYZ2flh(x,y,z)[1]
+        m = 0.9993
+        
+        N = self.a/sqrt(1-self.e2*sin(f)**2)
+        e2p = self.e2/(1-self.e2)
+        t = tan(f)
+        n2 = e2p * cos(f)**2
+        l0 = radians(19)
+        lam = l - l0
+        
+        A0 = 1 - (self.e2/4) - ((3*(self.e2**2))/64) - ((5*(self.e2**3))/256)
+        A2 = (3/8) * (self.e2 + ((self.e2**2)/4) + ((15 * (self.e2**3))/128))
+        A4 = (15/256) * (self.e2**2 + ((3*(self.e2**3))/4))
+        A6 = (35 * (self.e2**3))/3072
+        
+        sig = self.a * ((A0*f) - (A2*sin(2*f)) + (A4*sin(4*f)) - (A6*sin(6*f)))
+        x = sig + ((lam**2)/2) * (N*sin(f)*cos(f)) * (1 + ((lam**2)/12) * ((cos(f))**2) * (5 - t**2 + 9*n2 + 4*(n2**2)) + ((lam**4)/360) * ((cos(f))**4) * (61 - (58*(t**2)) + (t**4) + (270*n2) - (330 * n2 *(t**2))))
+        y = lam * (N * cos(f)) * (1 + ((((lam**2)/6) * (cos(f))**2) * (1-(t**2) + n2)) +  (((lam**4)/(120)) * (cos(f)**4)) * (5 - (18 * (t**2)) + (t**4) + (14*n2) - (58*n2*(t**2))))
             
-            """ 
-            m = 0.9993
+        x92 = x * m - 5300000
+        y92 = y * m + 500000
             
-            N = self.a/math.sqrt(1-self.e2*math.sin(fi)**2)
-            e2p = self.e2/(1-self.e2)
-            t = math.tan(fi)
-            n2 = e2p * math.cos(fi)**2
-            l0 = math.radians(19)
-            lam = l - l0
-            
-            A0 = 1 - (self.e2/4) - ((3*(self.e2**2))/64) - ((5*(self.e2**3))/256)
-            A2 = (3/8) * (self.e2 + ((self.e2**2)/4) + ((15 * (self.e2**3))/128))
-            A4 = (15/256) * (self.e2**2 + ((3*(self.e2**3))/4))
-            A6 = (35 * (self.e2**3))/3072
-            
-            sig = self.a * ((A0*fi) - (A2*math.sin(2*fi)) + (A4*math.sin(4*fi)) - (A6*math.sin(6*fi)))
-            x = sig + ((lam**2)/2) * (N*math.sin(fi)*math.cos(fi)) * (1 + ((lam**2)/12) * ((math.cos(fi))**2) * (5 - t**2 + 9*n2 + 4*(n2**2)) + ((lam**4)/360) * ((math.cos(fi))**4) * (61 - (58*(t**2)) + (t**4) + (270*n2) - (330 * n2 *(t**2))))
-            y = lam * (N * math.cos(fi)) * (1 + ((((lam**2)/6) * (math.cos(fi))**2) * (1-(t**2) + n2)) +  (((lam**4)/(120)) * (math.cos(fi)**4)) * (5 - (18 * (t**2)) + (t**4) + (14*n2) - (58*n2*(t**2))))
-            
-            x92 = x * m - 5300000
-            y92 = y * m + 500000
-            
-            return(x92, y92)
+        return(x92, y92)
 
 
     def u92u00_2_GK(X, Y):
