@@ -1,6 +1,6 @@
 #Poczatek projektu
 from math import *
-import numpy as np
+#import numpy as np
 
 
 
@@ -63,16 +63,16 @@ class Transformation:
             wysokosc elipsoidalna [m]
 
         '''
-        p = np.sqrt(X**2 + Y**2)
-        f = np.arctan(Z / (p * (1 - self.e2)))
+        p = sqrt(X**2 + Y**2)
+        f = atan(Z / (p * (1 - self.e2)))
         while True:
-            N = self.a / np.sqrt(1 - self.e2 * np.sin(f)**2)
-            h = (p/np.cos(f)) - N
+            N = self.a / sqrt(1 - self.e2 * sin(f)**2)
+            h = (p/cos(f)) - N
             fp = f    #f poprzednie 
-            f = np.arctan(Z/(p*(1 - self.e2 * N/ (N +h))))
+            f = atan(Z/(p*(1 - self.e2 * N/ (N +h))))
             if abs(fp - f) < (0.000001/206265):
                 break
-        l = np.arctan2(Y , X)
+        l = atan2(Y , X)
         return(f,l,h)
     
    
@@ -266,28 +266,28 @@ with open('wsp_inp.txt', 'r') as plik:
             Y.append(float(x[1]))
             Z.append(float(x[2]))
             
-print(X)
+#print(X)
         
         
 if __name__ == "__main__":
     #tworze obiekt
     geo = Transformation(model = "wgs84")
     #wsp geocentryczne
-#    x = 3664940.500; y = 1409153.590; z = 5009571.170
+    x = 3664940.500; y = 1409153.590; z = 5009571.170
 #    x00,y00 = geo.XY_2000(x,y,z)
 #    x92,y92 = geo.XY_1992(x, y, z)
-#    f1, l1, h = geo.XYZ2flh(x,y,z)
-#    N, E, U = geo.XYZ_neu(x, y)
-#    f = f1 * 180 / pi
-#    l = l1 * 180 / pi
-#    print(x00,y00)
+ #   f1, l1, h = geo.XYZ2flh(x,y,z)
+ #   N, E, U = geo.XYZ_neu(x, y)
+ #   f = f1 * 180 / pi
+ #   l = l1 * 180 / pi
+ #   print(x00,y00)
+ #   print('')
+ #   print(x92,y92)
 #    print('')
-#   print(x92,y92)
-#    print('')
-#   print(f, l, h)
-#    print('')
-#    print(N, E, U)
-#   print('')
+ #   print(f, l, h)
+ #   print('')
+ #  print(N, E, U)
+  #  print('')
     for A,B,C in zip(X,Y,Z):
         f, l, h = geo.XYZ2flh(A, B, C)
         F.append(degrees(f))
