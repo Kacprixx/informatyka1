@@ -206,19 +206,37 @@ class Transformation:
         e2 = self.e2
         f = self.XYZ2flh(x, y, z)[0]
         l = self.XYZ2flh(x, y, z)[1]
-        
-        
-        def GaussKruger(fa, la, L0, a, e2):
-            b = a*(sqrt(1-e2))
-            e2 = ((a)**2-(b)**2)/((b)**2)
-            t = np.tan(fa)
-            eta2 = (e2)*((np.cos(fa))**2)
-            dl = la-L0
-            N = Np(fa, a, e2)
-            sigma1 = sigma(e2, a, fa)
-            Xgk = sigma1+((dl**2)/2)*N*(sin(fa))*(cos(fa))*(1+((dl**2)/12)*((cos(fa))**2)*(5-(t**2)+9*(eta2)+4*(eta2)**2)+((dl**4)/360)*((cos(fa))**4)*(61-58*(t**2)+(t**4)+270*(eta2)-330*(eta2)*(t**2)))
-            Ygk = dl*N*(cos(fa))*(1+((dl**2)/6)*((cos(fa))**2)*(1-t**2+eta2)+((dl**4)/120)*((cos(fa))**4)*(5-18*(t**2)+(t**4)+14*eta2-58*(eta2)*(t**2)))
-            return(Xgk, Ygk)
+        if (l.all() > 13.5 and l.all()) < 16.5:
+            s = 5
+            l0 = 15
+        elif (l.all() > 16.5 and l.all() < 19.5):
+            s = 6
+            lam0 = 18
+        elif (l.all() > 19.5 and la.all() < 22.5):
+            s = 7
+            l0 = 21
+        elif (l.all() > 22.5 and l.all() < 25.5):
+            s = 8
+            l0 = 24
+
+        lam = np.radians(lam)
+        lam0 = np.radians(lam0)
+        l = lam - lam0
+    
+        b = self.a*(sqrt(1-e2))
+        e2 = ((self.a)**2-(b)**2)/((b)**2)
+        t = np.tan(fa)
+        eta2 = (self.e2)*((np.cos(fa))**2)
+        dl = la-L0
+        N = Np(fa,self)
+        A0 = 1 - (self.e2/4) - ((3*self.e2**2)/64) - ((5*self.e2**3)/256)
+        A2 = 3/8 * (self.e2 + ((self.e2**2)/4) + (15*self.e2**3)/128)
+        A4 = 15/256 * (self.e2**2 + (3*self.e2**3)/4)
+        A6 = (35*self.e2**3)/3072
+        sigma = self.a * (A0*fa - A2*np.sin(2*fa) + A4*np.sin(4*fa) - A6*np.sin(6*fa))
+        Xgk = sigma1+((dl**2)/2)*N*(sin(fa))*(cos(fa))*(1+((dl**2)/12)*((cos(fa))**2)*(5-(t**2)+9*(eta2)+4*(eta2)**2)+((dl**4)/360)*((cos(fa))**4)*(61-58*(t**2)+(t**4)+270*(eta2)-330*(eta2)*(t**2)))
+        Ygk = dl*N*(cos(fa))*(1+((dl**2)/6)*((cos(fa))**2)*(1-t**2+eta2)+((dl**4)/120)*((cos(fa))**4)*(5-18*(t**2)+(t**4)+14*eta2-58*(eta2)*(t**2)))
+        return(Xgk, Ygk)
 
 
 
