@@ -139,45 +139,44 @@ class Transformation:
         return(X, Y, Z)
     
     
-    def flh2neu(fl1, fl2, self):
+    def XYZ_neu(self, x, y, z):
         """   
         Funkcja przelicza wspolrzedne geodezyjne  
         na wspolrzedne topograficzne.
     
         Parameters
         -------
-        fl1 : [list]  
-             wpolrzedne geodezyjne punktu poczatkowego [radiany]
-        fl2 : [list]  
-             wpolrzedne geodezyjne punktu koncowego [radiany]
-        a   : [float] 
-             dluzsza polos elipsoidy [m]
-        e2  : [float] 
-             mimosrod elipsoidy [niemianowana]
+        x : float
+            wspolrzedna geocentryczna [m]
+        y : float
+            wspolrzedna geocentryczna [m]
+        z : float
+            wspolrzedna geocentryczna [m]
+        a : float 
+            dluzsza polos elipsoidy [m]
+        e2: float 
+            mimosrod elipsoidy [niemianowana]
       
         Returns
         -------
-        N : [float] 
+        N : float 
             wpolrzedna topocentryczna N (north) [m]
-        E : [float] 
+        E : float 
             wpolrzedna topocentryczna E (east) [m]
-        U : [float] 
+        U : float 
             wpolrzedna topocentryczna U (up) [m]
     
-        """  
-        X1, Y1, Z1 = self.flh2XYZ(fl1[0], fl1[1], fl1[2], self.a, self.e2)
-        X2, Y2, Z2 = self.flh2XYZ(fl2[0], fl2[1], fl2[2], self.a, self.e2)
-    
-        dx = [X2 - X1, Y2 - Y1, Z2 - Z1]  
-        R = np.array([[-np.sin(fl1[0]) * np.cos(fl1[1]), -np.sin(fl1[1]), np.cos(fl1[0]) * np.cos(fl1[1])],
-                      [-np.sin(fl1[0]) * np.sin(fl1[1]), np.cos(fl1[1]) , np.cos(fl1[0]) * np.sin(fl1[1])],
-                      [np.cos(fl1[0]) , 0 , np.sin(fl1[0])]])
-    
-        neu = R.T @ dx
-        N = neu[0]
-        E = neu[1]
-        U = neu[2]
-        return(N, E, U)
+        """ 
+        a = self.a
+        e2 = self.e2
+        f = self.XYZ2flh(x, y, z)[0]
+        l = self.XYZ2flh(x, y, z)[1]
+        N = self.a / sqrt(1 - self.e2 * sin(f)**2)
+      
+        N1 = -sin(f) * cos(l) * x - sin(f) * sin(l) * y + cos(f) * z
+        E = -sin(l) * x + cos(l) * y
+        U = cos(f) * cos(l) * x + cos(f) * sin(l) * y  + sin(f) * z
+        return (N1, E, U)
     
     
     
