@@ -4,10 +4,6 @@ import numpy as np
 
 
 
-
-    
-#o = object()
-
 class Transformation:
     def __init__(self, model: str = "grs80"):
         '''       
@@ -244,15 +240,116 @@ class Transformation:
 
 
     
+X = []
+Y = []
+Z = []
+F = []
+L = []
+H = []
+X_92 = []
+Y_92 = []
+X_00 = []
+Y_00 = []
+N = []
+E = []
+U = []
+
+
+with open('wsp_inp.txt', 'r') as plik:
+    lines = plik.readlines()
+    t = 0
+    for i in lines:
+        t = t + 1
+        if t > 4:
+            x = i.split(',')
+            X.append(float(x[0]))
+            Y.append(float(x[1]))
+            Z.append(float(x[2]))
+            
+print(X)
+        
+        
 if __name__ == "__main__":
     #tworze obiekt
     geo = Transformation(model = "wgs84")
-    #wsp geocentryczne 
-    X = 3664940.500; Y = 1409153.590; Z = 5009571.170
-    x, y = geo.ukl2000(X, Y, Z)
-    #f = f1 * 180 / pi 
-    #l = l1 * 180 / pi
-    print(x, y)
+    #wsp geocentryczne
+#    x = 3664940.500; y = 1409153.590; z = 5009571.170
+#    x00,y00 = geo.XY_2000(x,y,z)
+#    x92,y92 = geo.XY_1992(x, y, z)
+#    f1, l1, h = geo.XYZ2flh(x,y,z)
+#    N, E, U = geo.XYZ_neu(x, y)
+#    f = f1 * 180 / pi
+#    l = l1 * 180 / pi
+#    print(x00,y00)
+#    print('')
+#   print(x92,y92)
+#    print('')
+#   print(f, l, h)
+#    print('')
+#    print(N, E, U)
+#   print('')
+    for A,B,C in zip(X,Y,Z):
+        f, l, h = geo.XYZ2flh(A, B, C)
+        F.append(degrees(f))
+        L.append(degrees(l))
+        H.append(h)
+        x92, y92 = geo.XY_1992(A, B, C)
+        X_92.append(x92)
+        Y_92.append(y92)
+        x00, y00 = geo.XY_2000(A, B, C)
+        X_00.append(x00)
+        Y_00.append(y00)
+        n, e, u = geo.XYZ_neu(A, B, C)
+        N.append(n)
+        E.append(e)
+        U.append(u)
+    
+
+
+
+plik=open("wyniki.txt","w")
+plik.write(f'Współrzędne FLH, PL_1992, PL_2000, NEU stacji permanentnej GNSS \n')
+plik.write(f'Obserwatorium Astronomiczno-Geodezyjne w Józefosławiu \n')
+plik.write(f'# ************************************* \n')
+plik.write(f'# BLH**********************************\n')
+plik.write(f'  B[d]         L[d]         H[m] \n')
+plik.write(f'# ************************************* \n')
+for A,B,C in zip(F,L,H):
+    A = f'{A:7.4f}'
+    B = f'{B:7.4f}'
+    C = f'{C:7.4f}'
+    plik.write(f'{A},      {B},      {C} \n')
+    
+  
+plik.write(f'# ************************************* \n')
+plik.write(f'# PL-2000************************************* \n')
+plik.write(f'  X[m]         Y[m] \n')
+plik.write(f'# ************************************* \n')
+for A,B in zip(X_00,Y_00):
+    A = f'{A:7.3f}'
+    B = f'{B:7.3f}'
+    plik.write(f'{A},   {B} \n')
+    
+plik.write(f'# ************************************* \n')
+plik.write(f'# PL-1992************************************* \n')
+plik.write(f'  X[m]         Y[m] \n')
+plik.write(f'# ************************************* \n')
+for A,B in zip(X_92,Y_92):
+    A = f'{A:7.3f}'
+    B = f'{B:7.3f}'
+    plik.write(f'{A},   {B} \n')
+
+plik.write(f'# ************************************* \n')
+plik.write(f'# NEU************************************* \n')
+plik.write(f'  N[m]         E[m]         U[m] \n')
+plik.write(f'# ************************************* \n')
+
+for A,B,C in zip(N,E,U):
+    A = f'{A:7.3f}'
+    B = f'{B:7.3f}'
+    C = f'{C:7.3f}'
+    plik.write(f'{A},   {B},      {C} \n')
+plik.close()
 
 
 
