@@ -22,7 +22,6 @@ class Transformation:
         '''
         if model == "wgs84":
             self.a = 6378137 
-            self.a = 6378137
             self.b = 6356752.31424518
         elif model == "grs80":
             self.a = 6378137
@@ -254,13 +253,13 @@ N = []
 E = []
 U = []
 
-
+            
 with open('wsp_inp.txt', 'r') as plik:
     lines = plik.readlines()
     t = 0
     for i in lines:
         t = t + 1
-        if t > 4:
+        if t > 0:
             x = i.split(',')
             X.append(float(x[0]))
             Y.append(float(x[1]))
@@ -273,7 +272,7 @@ if __name__ == "__main__":
     #tworze obiekt
     geo = Transformation(model = "wgs84")
     #wsp geocentryczne
-    x = 3664940.500; y = 1409153.590; z = 5009571.170
+#    x = 100; y = 120; z = 0
 #    x00,y00 = geo.XY_2000(x,y,z)
 #    x92,y92 = geo.XY_1992(x, y, z)
  #   f1, l1, h = geo.XYZ2flh(x,y,z)
@@ -308,11 +307,11 @@ if __name__ == "__main__":
 
 
 plik=open("wyniki.txt","w")
-plik.write(f'Współrzędne FLH, PL_1992, PL_2000, NEU stacji permanentnej GNSS \n')
+plik.write(f'Współrzędne flh, PL_1992, PL_2000, NEU stacji permanentnej GNSS \n')
 plik.write(f'Obserwatorium Astronomiczno-Geodezyjne w Józefosławiu \n')
 plik.write(f'# ************************************* \n')
-plik.write(f'# BLH **********************************\n')
-plik.write(f'  B[d]         L[d]         H[m] \n')
+plik.write(f'# fLh **********************************\n')
+plik.write(f'  f[d]         l[d]         h[m] \n')
 plik.write(f'# ************************************* \n')
 for A,B,C in zip(F,L,H):
     A = f'{A:7.4f}'
