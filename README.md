@@ -1,4 +1,4 @@
-# informatyka1
+# kalkulator współrzędnych 
 # pełny skrypt projektu znajduję się w pliku "zajęcia_z_github.py"
 # w pliku "pies.py" znajduje się skrypt, który pozwala wywołać nasz projekt za pomocą biblioteki arpgarse
 
@@ -6,6 +6,7 @@
     program został stworzony aby w łatwy sposób transformować współrzędne pomiędzy damymi układami  
     Danymi początkowymi są wsp. geocentryczne(X, Y, Z) 
     obsugiwane elipsoidy to : WGS84, GRS80
+    współrzędne można transformować pomiędzy układami wspołrzędnych: geocentryczne, geodezyjne, topocentryczne, oraz geocentryczne w układzie PL-2000 i PL-1992 
 
 # 2) WYMAGANIA DZIAŁANIA PROGRAMU:
     aby aplikacja działała w sposób prawidłowy należy użyć python w wersji 3.9 lub nowszej aktualizacji
@@ -26,12 +27,13 @@
        3664940.520,1409153.570,5009571.167
 
        Dany plik ze współrzędnymi należy mieć w tym samym folderze co skrypt programu
-       aby program wywołał wyniki nazwę pliku (nazwa_pliku.txt) należy wpisać w 258 linijce skryptu w miejsce open('nazwa_pliku.txt', 'r')
+       aby program wywołał wyniki nazwę pliku (nazwa_pliku.txt) należy wpisać w 258 linijce skryptu 'zajęcia_z_github' w miejsce open('nazwa_pliku.txt', 'r')
        Plik z wynikami o nazwie wyniki.txt zostanie utworzony w folderze, którym znajduję sie skrypt programu 
+       kolejność wyników: wsp. 1-geodezyjne, 2-geocentryczne PL-2000, 3-geocentryczne PL-1992, 4-topocentryczne 
        - Z WYKORZYSTANIEM BIBLIOTEKI ARGPARSE
-       aby policzyć współrzędne należy otworzyć command window ( aby to zrobić należy otworzyć folder w którym znajduje się skrpt programu
+       aby policzyć współrzędne należy otworzyć command window ( aby to zrobić należy otworzyć folder w którym znajduje się skrypt programu
        w ścieżce pliku należy kliknąc strzałkę, usunać tekts, który podświetli się na niebiesko, napisac "cmd" i nacisnąć enter
-       w otwartm command window należy wpisać -m "nazwa_medelu" -x 100 -y 100 -z 100     (jako nazwa_modelu możemy przyjąć wgs80 lub grs84, wsp są przykładowe )
-       
+       w otwartm command window należy wpisać " pies.py -m "nazwa_medelu" -x 100 -y 100 -z 100"     (jako nazwa_modelu możemy przyjąć wgs80 lub grs84, wsp są przykładowe )
+       wartosći i argumentu odzielamy spacją 
 #       5) ZNANE BŁĘDY I NIETYPOWE ZACHOWANIA PROGRAMU
 
