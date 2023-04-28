@@ -1,3 +1,4 @@
+from math import *
 from argparse import ArgumentParser
 import zajęcia_z_github
 from zajęcia_z_github import Transformation 
@@ -9,13 +10,21 @@ parser.add_argument('-y', '--y', type=float)
 parser.add_argument('-z', '--z', type=float)
 args = parser.parse_args()
 
+
 geo = Transformation(model = args.m)
-f, l, h = geo.XYZ2flh(args.x, args.y, args.z) 
+f1, l1, h = geo.XYZ2flh(args.x, args.y, args.z) 
+N1, E, U = geo.XYZ_neu(args.x, args.y, args.y) 
+x_92, y_92 = geo.XY_1992(args.x, args.y, args.z)
+x_20, y_20 = geo.XY_2000(args.x, args.y, args.z)
 
 
-#print(suma)
-#print(get_product(args.x, args.y))
-#print(module_12_14.__name__)
+
+f = f1 * 180 /pi 
+l = l1 * 180 /pi 
+print(f,l,h)
+print(N1, E, U)
+print(x_92, y_92)
+print(x_20, y_20)
 
 
 
