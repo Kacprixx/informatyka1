@@ -22,10 +22,9 @@ x_20, y_20 = geo.XY_2000(args.x, args.y, args.z)
 f = f1 * 180 /pi 
 l = l1 * 180 /pi 
 print(f,l,h)
-print(N1, E, U)
-print(x_92, y_92)
 print(x_20, y_20)
-
+print(x_92, y_92)
+print(N1, E, U)
 
 
 
