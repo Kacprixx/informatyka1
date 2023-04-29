@@ -21,11 +21,10 @@ x_20, y_20 = geo.XY_2000(args.x, args.y, args.z)
 
 f = f1 * 180 /pi 
 l = l1 * 180 /pi 
-print(f,l,h)
-print(x_20, y_20)
-print(x_92, y_92)
-print(N1, E, U)
-
+print(round(f,5),round(l,5), round(h,5))
+print(round(x_20,3), round(y_20,3))
+print(round(x_92,3), round(y_92,3))
+print(round(N1,3), round(E,3), round(U,3))
 
 
 
