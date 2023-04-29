@@ -36,5 +36,6 @@
        w otwartm command window należy wpisać "python pies.py -m "nazwa_medelu" -x 100 -y 100 -z 100"     (jako nazwa_modelu możemy przyjąć wgs84 lub grs80, wsp są przykładowe )
        wartosći i argumenty odzielamy spacją
        kolejność wyników: wsp. 1-geodezyjne, 2-geocentryczne PL-2000, 3-geocentryczne PL-1992, 4-topocentryczne
-#       5) ZNANE BŁĘDY I NIETYPOWE ZACHOWANIA PROGRAMU
+#    5) ZNANE BŁĘDY I NIETYPOWE ZACHOWANIA PROGRAMU
+       jedynym nietypowym zachowaniem programu jest problem z wynikami topocentrycznymi(N,E,U) często wartości wyników są nie poprawne     
 
