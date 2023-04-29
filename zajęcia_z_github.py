@@ -108,12 +108,12 @@ class Transformation:
         e2 = self.e2
         f = self.XYZ2flh(x, y, z)[0]
         l = self.XYZ2flh(x, y, z)[1]
-        N = self.a / sqrt(1 - self.e2 * sin(f)**2)
+        #N = self.a / sqrt(1 - self.e2 * sin(f)**2)
       
-        N1 = -sin(f) * cos(l) * x - sin(f) * sin(l) * y + cos(f) * z
+        N = -sin(f) * cos(l) * x - sin(f) * sin(l) * y + cos(f) * z
         E = -sin(l) * x + cos(l) * y
         U = cos(f) * cos(l) * x + cos(f) * sin(l) * y  + sin(f) * z
-        return (N1, E, U)
+        return (N, E, U)
     
     
     
