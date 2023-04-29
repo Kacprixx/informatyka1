@@ -33,7 +33,7 @@
        - Z WYKORZYSTANIEM BIBLIOTEKI ARGPARSE
        aby policzyć współrzędne należy otworzyć command window ( aby to zrobić należy otworzyć folder w którym znajduje się skrypt programu
        w ścieżce pliku należy kliknąc strzałkę, usunać tekts, który podświetli się na niebiesko, napisac "cmd" i nacisnąć enter
-       w otwartm command window należy wpisać " pies.py -m "nazwa_medelu" -x 100 -y 100 -z 100"     (jako nazwa_modelu możemy przyjąć wgs80 lub grs84, wsp są przykładowe )
+       w otwartm command window należy wpisać "python pies.py -m "nazwa_medelu" -x 100 -y 100 -z 100"     (jako nazwa_modelu możemy przyjąć wgs80 lub grs84, wsp są przykładowe )
        wartosći i argumenty odzielamy spacją
        kolejność wyników: wsp. 1-geodezyjne, 2-geocentryczne PL-2000, 3-geocentryczne PL-1992, 4-topocentryczne
 #       5) ZNANE BŁĘDY I NIETYPOWE ZACHOWANIA PROGRAMU
