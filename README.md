@@ -27,7 +27,7 @@
        3664940.520,1409153.570,5009571.167
 
        Dany plik ze współrzędnymi należy mieć w tym samym folderze co skrypt programu
-       aby program wywołał wyniki nazwę pliku (nazwa_pliku.txt) należy wpisać w 258 linijce skryptu 'zajęcia_z_github' w miejsce open('nazwa_pliku.txt', 'r')
+       aby program wywołał, ten plik musi się nazywać "wsp_inp.txt" , w przeciwnym wypadku plik nie zostanie wczytany. 
        Plik z wynikami o nazwie wyniki.txt zostanie utworzony w folderze, którym znajduję sie skrypt programu 
        kolejność wyników: wsp. 1-geodezyjne, 2-geocentryczne PL-2000, 3-geocentryczne PL-1992, 4-topocentryczne 
        - Z WYKORZYSTANIEM BIBLIOTEKI ARGPARSE
