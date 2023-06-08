@@ -235,9 +235,6 @@ class Transformation:
         y92 = y * m + 500000
             
         return(x92, y92)
-
-
-    
 X = []
 Y = []
 Z = []
@@ -251,6 +248,129 @@ Y_00 = []
 N = []
 E = []
 U = []
+
+
+    def wczytanie_pliku(self, Dane):
+        '''
+        wczytanie pliku z danymi X,Y,Z oraz swtorzenie posegregowanych 
+
+        
+        Parametry
+        ----------
+        Dane [STR]
+            [STR] - nazwa pliku do wczytania .txt 
+        Returns
+        -------
+        X, Y, Z [LIST]
+            [LIST] - dane X, Y, Z
+        '''
+        
+        with open(Dane, "r") as plik:
+            tab=np.genfromtxt(plik, delimiter=",", dtype = '<U20', skip_header = 4)
+            X=[]
+            Y=[]
+            Z=[]
+            for i in tab:
+                x=i[0]
+                X.append(float(x))
+                y=i[1]
+                Y.append(float(y))
+                z=i[2]
+                Z.append(float(z))
+            ilosc_wierszy = len(X)
+        return(X, Y, Z, ilosc_wierszy)
+
+
+
+
+    def wczytanie_zapisanie_pliku(self, Dane, output ='dms' , xyz_txt = 'Wyniki_transformacji_X_Y_Z_fi_lambda_h_x1992_y1992_x2000_y2000.txt', neu_txt = "Wyniki_transformacji_n_e_u.txt" ):
+        '''
+        wczytanie i zapisanie pliku za pomocą jednej funkcji
+
+        Parameters
+        ----------
+        Dane : txt
+            Plik z danymi xyz.
+        output : str
+            sposób w jakiej ma zapisywać współrzędne f, l [dms, radiany, dec_degree] .
+        XYZ_txt: STR
+            nazwa pliku wynikowego na xyz, flh, PL1992, PL2000
+        NEU_txt: STR
+
+        Returns
+        -------
+        Plik txt
+
+        '''
+        X, Y, Z, C = Transformacje.wczytanie_pliku(self, Dane)
+        F=[]
+        L=[]
+        H=[]
+        X92=[]
+        Y92=[]
+        X00=[]
+        Y00=[]
+        N=[]
+        E=[]
+        U=[]
+        
+        for x, y, z in zip(X, Y, Z):
+            f,l,h = Transformacje.hirvonen(self, x, y, z, output = output)
+            if output == "dms":
+                F.append(f)
+                L.append(l)
+            elif output == "radiany":
+                f=Transformacje.zamiana_float2string_rad(self,f)
+                l=Transformacje.zamiana_float2string_rad(self,l)
+                F.append(f)
+                L.append(l)
+            else:
+                f=Transformacje.zamiana_float2string_fl(self,f)
+                l=Transformacje.zamiana_float2string_fl(self,l)
+                F.append(f)
+                L.append(l)
+            H.append(Transformacje.zamiana_float2string(self, h))
+            f,l,h = Transformacje.hirvonen(self, x, y, z)
+            
+            if l >= 13.5 and l <= 25.5 and f <= 55.0 and f >= 48.9:
+                x92, y92 = Transformacje.flh2PL92(self, f,l)
+                X92.append(Transformacje.zamiana_float2string(self, x92))
+                Y92.append(Transformacje.zamiana_float2string(self, y92))
+                x00, y00 = Transformacje.flh2PL00(self, f,l)
+                X00.append(Transformacje.zamiana_float2string(self, x00))
+                Y00.append(Transformacje.zamiana_float2string(self, y00))
+            else:
+                x92 = "         '-'         " ; X92.append(x92)
+                y92 = "         '-'         " ; Y92.append(y92)
+                x00 = "         '-'         " ; X00.append(x00)
+                y00 = "         '-'         " ; Y00.append(y00)
+        
+        f1, l1, h1 = Transformacje.hirvonen(self, X[0], Y[0], Z[0])
+        n1, e1, u1 = Transformacje.xyz2neu(self, f1, l1, X[0], Y[0], Z[0], X[-1], Y[-1], Z[-1])
+        N.append(n1)
+        E.append(e1)
+        U.append(u1)
+        
+        i=0
+        while i<(C-1):
+            f, l, h = Transformacje.hirvonen(self, X[i], Y[i], Z[i])
+            n, e, u = Transformacje.xyz2neu(self, f, l, X[i], Y[i], Z[i], X[i+1], Y[i+1], Z[i+1])
+            N.append(n)
+            E.append(e)
+            U.append(u)
+            i+=1
+        
+        Transformacje.zapisaniePliku(self, X, Y, Z, F, L, H, X92, Y92, X00, Y00, N, E, U, xyz_txt, neu_txt 
+
+
+
+
+
+
+
+
+
+
 
             
 with open('wsp_inp.txt', 'r') as plik:
