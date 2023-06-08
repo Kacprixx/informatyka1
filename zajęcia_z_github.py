@@ -1,7 +1,7 @@
 #Poczatek projektu
 from math import *
 
-
+#
 
 
 class Transformation:
