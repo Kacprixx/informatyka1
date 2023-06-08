@@ -1,7 +1,7 @@
 #Poczatek projektu
 from math import *
-
-#
+#import numpy as np
+#@@@
 
 
 class Transformation:
@@ -14,7 +14,7 @@ class Transformation:
         e2 = mimosród^2
  
         Inicjuje obiekt elipsoidy na podstawie wybranego modelu.
-        Dostępne modele to: wgs84, grs80 
+        Dostępne modele to: WGS84, GRS80 i Mars.
         
         Argumenty:
         model (str): Łańcuch znaków określający model elipsoidy. 
@@ -108,6 +108,7 @@ class Transformation:
         e2 = self.e2
         f = self.XYZ2flh(x, y, z)[0]
         l = self.XYZ2flh(x, y, z)[1]
+        #N = self.a / sqrt(1 - self.e2 * sin(f)**2)
       
         N = -sin(f) * cos(l) * x - sin(f) * sin(l) * y + cos(f) * z
         E = -sin(l) * x + cos(l) * y
@@ -264,27 +265,28 @@ with open('wsp_inp.txt', 'r') as plik:
             Y.append(float(x[1]))
             Z.append(float(x[2]))
             
-
+#print(X)
         
         
 if __name__ == "__main__":
+    #tworze obiekt
     geo = Transformation(model = "wgs84")
     #wsp geocentryczne
-#    x = ; y = ; z = 
+#    x = 100; y = 120; z = 0
 #    x00,y00 = geo.XY_2000(x,y,z)
 #    x92,y92 = geo.XY_1992(x, y, z)
-#   f1, l1, h = geo.XYZ2flh(x,y,z)
-#   N, E, U = geo.XYZ_neu(x, y)
-#   f = f1 * 180 / pi
-#   l = l1 * 180 / pi
-#   print(x00,y00)
-#   print('')
-#   print(x92,y92)
+ #   f1, l1, h = geo.XYZ2flh(x,y,z)
+ #   N, E, U = geo.XYZ_neu(x, y)
+ #   f = f1 * 180 / pi
+ #   l = l1 * 180 / pi
+ #   print(x00,y00)
+ #   print('')
+ #   print(x92,y92)
 #    print('')
-#   print(f, l, h)
-#   print('')
-#  print(N, E, U)
-#  print('')
+ #   print(f, l, h)
+ #   print('')
+ #  print(N, E, U)
+  #  print('')
     for A,B,C in zip(X,Y,Z):
         f, l, h = geo.XYZ2flh(A, B, C)
         F.append(degrees(f))
