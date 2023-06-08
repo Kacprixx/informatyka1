@@ -1,6 +1,6 @@
 #Poczatek projektu
 from math import *
-
+from argparse import ArgumentParser
 
 
 class Transformation:
@@ -235,7 +235,9 @@ class Transformation:
         y92 = y * m + 500000
             
         return(x92, y92)
-    '''    
+
+
+      
 X = []
 Y = []
 Z = []
@@ -249,270 +251,28 @@ Y_00 = []
 N = []
 E = []
 U = []
-'''
-    
-    def wczytanie_pliku(self, Dane):
-        '''
-        wczytanie pliku z danymi X,Y,Z oraz swtorzenie posegregowanych 
-
-        
-        Parametry
-        ----------
-        Dane [STR]
-            [STR] - nazwa pliku do wczytania .txt 
-        Returns
-        -------
-        X, Y, Z [LIST]
-            [LIST] - dane X, Y, Z
-        '''
-        
-        with open(Dane, "r") as plik:
-            tab=np.genfromtxt(plik, delimiter=",", dtype = '<U20', skip_header = 4)
-            X=[]
-            Y=[]
-            Z=[]
-            for i in tab:
-                x=i[0]
-                X.append(float(x))
-                y=i[1]
-                Y.append(float(y))
-                z=i[2]
-                Z.append(float(z))
-                ilosc_wierszy = len(X)
-            return(X, Y, Z, ilosc_wierszy)
 
 
-
-
-    def wczytanie_zapisanie_pliku(self, Dane, output ='dms' , xyz_txt = 'Wyniki_transformacji_X_Y_Z_fi_lambda_h_x1992_y1992_x2000_y2000.txt', neu_txt = "Wyniki_transformacji_n_e_u.txt" ):
-        '''
-        wczytanie i zapisanie pliku za pomocą jednej funkcji
-
-        Parameters
-        ----------
-        Dane : txt
-            Plik z danymi xyz.
-        output : str
-            sposób w jakiej ma zapisywać współrzędne f, l [dms, radiany, dec_degree] .
-        XYZ_txt: STR
-            nazwa pliku wynikowego na xyz, flh, PL1992, PL2000
-        NEU_txt: STR
-
-        Returns
-        -------
-        Plik txt
-
-        '''
-        X, Y, Z, C = Transformacje.wczytanie_pliku(self, Dane)
-        F=[]
-        L=[]
-        H=[]
-        X92=[]
-        Y92=[]
-        X00=[]
-        Y00=[]
-        N=[]
-        E=[]
-        U=[]
-        
-        for x, y, z in zip(X, Y, Z):
-            f,l,h = Transformacje.hirvonen(self, x, y, z, output = output)
-            if output == "dms":
-                F.append(f)
-                L.append(l)
-            elif output == "radiany":
-                f=Transformacje.zamiana_float2string_rad(self,f)
-                l=Transformacje.zamiana_float2string_rad(self,l)
-                F.append(f)
-                L.append(l)
-            else:
-                f=Transformacje.zamiana_float2string_fl(self,f)
-                l=Transformacje.zamiana_float2string_fl(self,l)
-                F.append(f)
-                L.append(l)
-            H.append(Transformacje.zamiana_float2string(self, h))
-            f,l,h = Transformacje.hirvonen(self, x, y, z)
-            
-            if l >= 13.5 and l <= 25.5 and f <= 55.0 and f >= 48.9:
-                x92, y92 = Transformacje.flh2PL92(self, f,l)
-                X92.append(Transformacje.zamiana_float2string(self, x92))
-                Y92.append(Transformacje.zamiana_float2string(self, y92))
-                x00, y00 = Transformacje.flh2PL00(self, f,l)
-                X00.append(Transformacje.zamiana_float2string(self, x00))
-                Y00.append(Transformacje.zamiana_float2string(self, y00))
-            else:
-                x92 = "         '-'         " ; X92.append(x92)
-                y92 = "         '-'         " ; Y92.append(y92)
-                x00 = "         '-'         " ; X00.append(x00)
-                y00 = "         '-'         " ; Y00.append(y00)
-        
-        f1, l1, h1 = Transformacje.hirvonen(self, X[0], Y[0], Z[0])
-        n1, e1, u1 = Transformacje.xyz2neu(self, f1, l1, X[0], Y[0], Z[0], X[-1], Y[-1], Z[-1])
-        N.append(n1)
-        E.append(e1)
-        U.append(u1)
-        
-        i=0
-        while i<(C-1):
-            f, l, h = Transformacje.hirvonen(self, X[i], Y[i], Z[i])
-            n, e, u = Transformacje.xyz2neu(self, f, l, X[i], Y[i], Z[i], X[i+1], Y[i+1], Z[i+1])
-            N.append(n)
-            E.append(e)
-            U.append(u)
-            i+=1
-        
-        Transformacje.zapisaniePliku(self, X, Y, Z, F, L, H, X92, Y92, X00, Y00, N, E, U, xyz_txt, neu_txt) 
-
-
-
-    def zapisaniePliku(self, X, Y, Z, f, l, h, x92, y92, x00, y00, N, E, U, xyz_txt, neu_txt ):
-        '''
-        funkcja zapisuje wyniki obliczeń (x, y, z, f, l, h, x92, y92, x1992, y1992, x2000, y2000 ,neu).
-        Tworzy z nich tabele.
-
-        Parametry
-        ----------
-        X, Y, Z : LIST
-             [metry] - współrzędne w układzie orto-kartezjańskim, 
-         f : LIST
-             [dms] - szerokość geodezyjna..
-         l : LIST
-             [dms] - długośc geodezyjna.
-         h : LIST
-             [metry] - wysokość elipsoidalna
-        X1992, Y1992 : LIST
-             [metry] - współrzędne w układzie 1992
-         X2000, Y2000 : LIST
-             [metry] - współrzędne w układzie 2000
-        n, e, u : str
-            współrzędne horyzontalne
-
-        Returns
-        -------
-        PLIK TXT
-
-        '''
-       
-        for A,B,C in zip(X,Y,Z):
-            f, l, h = geo.XYZ2flh(A, B, C)
-            F.append(degrees(f))
-            L.append(degrees(l))
-            H.append(h)
-            x92, y92 = geo.XY_1992(A, B, C)
-            X_92.append(x92)
-            Y_92.append(y92)
-            x00, y00 = geo.XY_2000(A, B, C)
-            X_00.append(x00)
-            Y_00.append(y00)
-            n, e, u = geo.XYZ_neu(A, B, C)
-            N.append(n)
-            E.append(e)
-            U.append(u)
-        
-
-
-
-            plik=open("wyniki.txt","w")
-            plik.write(f'Współrzędne flh, PL_1992, PL_2000, NEU stacji permanentnej GNSS \n')
-            plik.write(f'Obserwatorium Astronomiczno-Geodezyjne w Józefosławiu \n')
-            plik.write(f'# ************************************* \n')
-            plik.write(f'# fLh **********************************\n')
-            plik.write(f'  f[d]         l[d]         h[m] \n')
-            plik.write(f'# ************************************* \n')
-            for A,B,C in zip(F,L,H):
-                A = f'{A:7.4f}'
-                B = f'{B:7.4f}'
-                C = f'{C:7.4f}'
-                plik.write(f'{A},      {B},      {C} \n')
-                
-              
-            plik.write(f'# ************************************* \n')
-            plik.write(f'# PL_2000 ************************************* \n')
-            plik.write(f'  X[m]         Y[m] \n')
-            plik.write(f'# ************************************* \n')
-            for A,B in zip(X_00,Y_00):
-                A = f'{A:7.3f}'
-                B = f'{B:7.3f}'
-                plik.write(f'{A},   {B} \n')
-                
-            plik.write(f'# ************************************* \n')
-            plik.write(f'# PL_1992 ************************************* \n')
-            plik.write(f'  X[m]         Y[m] \n')
-            plik.write(f'# ************************************* \n')
-            for A,B in zip(X_92,Y_92):
-                A = f'{A:7.3f}'
-                B = f'{B:7.3f}'
-                plik.write(f'{A},   {B} \n')
-        
-            plik.write(f'# ************************************* \n')
-            plik.write(f'# NEU ************************************* \n')
-            plik.write(f'  N[m]         E[m]         U[m] \n')
-            plik.write(f'# ************************************* \n')
-        
-            for A,B,C in zip(N,E,U):
-                A = f'{A:7.3f}'
-                B = f'{B:7.3f}'
-                C = f'{C:7.3f}'
-                plik.write(f'{A},   {B},      {C} \n')
-            plik.close()
-        
-        
-        
-        '''
-        for i in range(len(X)):
-            X[i] = Transformacje.zamiana_float2string(self, X[i])
-            Y[i] = Transformacje.zamiana_float2string(self, Y[i])
-            Z[i] = Transformacje.zamiana_float2string(self, Z[i])
-        
-        with open(xyz_txt , "w",  encoding="utf-8") as plik:
-            plik.write(f"Wyniki_obliczen_Geodezyjnych; X, Y, Z, fi, lambda, h, x1992, y1992, x2000, y2000.\n")
-            plik.write(f"Znak '-' w koordynatach; x1992, y1992, x2000, y2000 oznacza, że dla podanych współrzędnych ortokartezjańskich (X, Y, Z) po obliczeniu współrzędnych geodezyjnych fi i lambda. fi i lambda nie należą do dozwolonych współrzędnych \ngeodezyjnych układów PL1992, PL2000.\n")
-            plik.write("-"*221)
-            plik.write(f"\n")
-            plik.write(f"|          X          |          Y          |          Z          |          fi         |        lambda       |          h          |        x1992        |        y1992        |        x2000        |        y2000        |")
-            plik.write(f"\n")
-            plik.write("-"*221)
-            plik.write(f"\n")
-            for x, y, z, f, l, h, x92, y92, x00, y00 in zip(X, Y, Z, f, l, h, x92, y92, x00, y00):
-                plik.write(f"|{x}|{y}|{z}|     {f}|     {l}|{h}|{x92}|{y92}|{x00}|{y00}|")
-                plik.write(f"\n")
-            plik.write("-"*221)
-        
-        with open(neu_txt , "w", encoding="utf-8") as plik1:
-            plik1.write(f"Wyniki_obliczen_Geodezyjnych; n, e, u.\n")
-            plik1.write("-"*154)
-            plik1.write(f"\n")
-            plik1.write(f"|                        n                         |                        e                         |                        u                         |")
-            plik1.write(f"\n")
-            plik1.write("-"*154)
-            plik1.write(f"\n")
-            for n, e, u in zip(N, E, U):
-                plik1.write(f"|{n}|{e}|{u}|")
-                plik1.write(f"\n")
-            plik1.write("-"*154)
-'''
-
-
-
-
-
-
-            
-#with open('wsp_inp.txt', 'r') as plik:
+#parser = ArgumentParser()
+#parser.add_argument('-t', '--t', type=str, help="Podaj nazwe pliku tekstowegoz danymi z rozszerzeniem txt")
+#args = parser.parse_args()            
+#with open(args.t, 'r') as plik:
 #    lines = plik.readlines()
-#    t = 0
-#   for i in lines:
-#        t = t + 1
-#        if t > 0:
-#            x = i.split(',')
-#            X.append(float(x[0]))
-#            Y.append(float(x[1]))
-#            Z.append(float(x[2]))
-            
+ #   t = 0
+ #   for i in lines:
+ #       t = t + 1
+ #       if t > 0:
+ #           x = i.split(',')
+ #           X.append(float(x[0]))
+ #           Y.append(float(x[1]))
+ #           Z.append(float(x[2]))         
 #print(X)
         
         
 if __name__ == "__main__":
+    parser = ArgumentParser()
+    parser.add_argument('-t', '--t', type=str, help="Podaj nazwe pliku tekstowegoz danymi z rozszerzeniem txt")
+    args = parser.parse_args()
     #tworze obiekt
     geo = Transformation(model = "wgs84")
     #wsp geocentryczne
@@ -531,7 +291,31 @@ if __name__ == "__main__":
  #   print('')
  #  print(N, E, U)
   #  print('')
-'''
+    X = []
+    Y = []
+    Z = []
+    F = []
+    L = []
+    H = []
+    X_92 = []
+    Y_92 = []
+    X_00 = []
+    Y_00 = []
+    N = []
+    E = []
+    U = []
+    
+    with open(args.t, 'r') as plik:
+        lines = plik.readlines()
+        t = 0
+        for i in lines:
+            t = t + 1
+            if t > 0:
+                x = i.split(',')
+                X.append(float(x[0]))
+                Y.append(float(x[1]))
+                Z.append(float(x[2]))
+            
     for A,B,C in zip(X,Y,Z):
         f, l, h = geo.XYZ2flh(A, B, C)
         F.append(degrees(f))
@@ -594,7 +378,7 @@ for A,B,C in zip(N,E,U):
     C = f'{C:7.3f}'
     plik.write(f'{A},   {B},      {C} \n')
 plik.close()
-'''
+
 
 
 
