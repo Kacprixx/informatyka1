@@ -271,9 +271,9 @@ with open(args.t, 'r') as plik:
         
         
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument('-t', '--t', type=str, help="Podaj nazwe pliku tekstowegoz danymi z rozszerzeniem txt")
-    args = parser.parse_args()
+#    parser = ArgumentParser()
+#    parser.add_argument('-t', '--t', type=str, help="Podaj nazwe pliku tekstowegoz danymi z rozszerzeniem txt")
+#    args = parser.parse_args()
     #tworze obiekt
     geo = Transformation(model = "wgs84")
     #wsp geocentryczne
