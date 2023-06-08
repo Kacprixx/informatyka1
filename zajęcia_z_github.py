@@ -235,7 +235,7 @@ class Transformation:
         y92 = y * m + 500000
             
         return(x92, y92)
-'''    
+    '''    
 X = []
 Y = []
 Z = []
@@ -278,8 +278,8 @@ U = []
                 Y.append(float(y))
                 z=i[2]
                 Z.append(float(z))
-            ilosc_wierszy = len(X)
-        return(X, Y, Z, ilosc_wierszy)
+                ilosc_wierszy = len(X)
+            return(X, Y, Z, ilosc_wierszy)
 
 
 
@@ -374,16 +374,16 @@ U = []
 
 
             
-with open('wsp_inp.txt', 'r') as plik:
-    lines = plik.readlines()
-    t = 0
-    for i in lines:
-        t = t + 1
-        if t > 0:
-            x = i.split(',')
-            X.append(float(x[0]))
-            Y.append(float(x[1]))
-            Z.append(float(x[2]))
+#with open('wsp_inp.txt', 'r') as plik:
+#    lines = plik.readlines()
+#    t = 0
+#   for i in lines:
+#        t = t + 1
+#        if t > 0:
+#            x = i.split(',')
+#            X.append(float(x[0]))
+#            Y.append(float(x[1]))
+#            Z.append(float(x[2]))
             
 #print(X)
         
