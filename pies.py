@@ -1,3 +1,4 @@
+
 from math import *
 from argparse import ArgumentParser
 import zajęcia_z_github
