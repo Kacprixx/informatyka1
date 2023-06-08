@@ -253,20 +253,20 @@ E = []
 U = []
 
 
-#parser = ArgumentParser()
-#parser.add_argument('-t', '--t', type=str, help="Podaj nazwe pliku tekstowegoz danymi z rozszerzeniem txt")
-#args = parser.parse_args()            
-#with open(args.t, 'r') as plik:
-#    lines = plik.readlines()
- #   t = 0
- #   for i in lines:
- #       t = t + 1
- #       if t > 0:
- #           x = i.split(',')
- #           X.append(float(x[0]))
- #           Y.append(float(x[1]))
- #           Z.append(float(x[2]))         
-#print(X)
+parser = ArgumentParser()
+parser.add_argument('-t', '--t', type=str, help="Podaj nazwe pliku tekstowegoz danymi z rozszerzeniem txt")
+args = parser.parse_args()
+            
+with open(args.t, 'r') as plik:
+    lines = plik.readlines()
+    t = 0
+    for i in lines:
+        t = t + 1
+        if t > 0:
+            x = i.split(',')
+            X.append(float(x[0]))
+            Y.append(float(x[1]))
+            Z.append(float(x[2]))
         
         
 if __name__ == "__main__":
@@ -291,20 +291,20 @@ if __name__ == "__main__":
  #   print('')
  #  print(N, E, U)
   #  print('')
-    X = []
-    Y = []
-    Z = []
-    F = []
-    L = []
-    H = []
-    X_92 = []
-    Y_92 = []
-    X_00 = []
-    Y_00 = []
-    N = []
-    E = []
-    U = []
-    
+#    X = []
+#    Y = []
+#    Z = []
+#    F = []
+#    L = []
+#    H = []
+#    X_92 = []
+#    Y_92 = []
+#    X_00 = []
+#    Y_00 = []
+#    N = []
+#    E = []
+#    U = []
+    '''
     with open(args.t, 'r') as plik:
         lines = plik.readlines()
         t = 0
@@ -315,7 +315,7 @@ if __name__ == "__main__":
                 X.append(float(x[0]))
                 Y.append(float(x[1]))
                 Z.append(float(x[2]))
-            
+      '''      
     for A,B,C in zip(X,Y,Z):
         f, l, h = geo.XYZ2flh(A, B, C)
         F.append(degrees(f))
