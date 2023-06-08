@@ -361,11 +361,11 @@ U = []
             U.append(u)
             i+=1
         
-        Transformacje.zapisaniePliku(self, X, Y, Z, F, L, H, X92, Y92, X00, Y00, N, E, U, xyz_txt, neu_txt 
+        Transformacje.zapisaniePliku(self, X, Y, Z, F, L, H, X92, Y92, X00, Y00, N, E, U, xyz_txt, neu_txt) 
 
 
 
-    def zapisaniePliku(self, X, Y, Z, f, l, h, x92, y92, x00, y00, N, E, U, xyz_txt, neu_txt ): 
+    def zapisaniePliku(self, X, Y, Z, f, l, h, x92, y92, x00, y00, N, E, U, xyz_txt, neu_txt ):
         '''
         funkcja zapisuje wyniki obliczeń (x, y, z, f, l, h, x92, y92, x1992, y1992, x2000, y2000 ,neu).
         Tworzy z nich tabele.
@@ -392,6 +392,7 @@ U = []
         PLIK TXT
 
         '''
+       
         for A,B,C in zip(X,Y,Z):
             f, l, h = geo.XYZ2flh(A, B, C)
             F.append(degrees(f))
@@ -411,49 +412,49 @@ U = []
 
 
 
-    plik=open("wyniki.txt","w")
-    plik.write(f'Współrzędne flh, PL_1992, PL_2000, NEU stacji permanentnej GNSS \n')
-    plik.write(f'Obserwatorium Astronomiczno-Geodezyjne w Józefosławiu \n')
-    plik.write(f'# ************************************* \n')
-    plik.write(f'# fLh **********************************\n')
-    plik.write(f'  f[d]         l[d]         h[m] \n')
-    plik.write(f'# ************************************* \n')
-    for A,B,C in zip(F,L,H):
-        A = f'{A:7.4f}'
-        B = f'{B:7.4f}'
-        C = f'{C:7.4f}'
-        plik.write(f'{A},      {B},      {C} \n')
+            plik=open("wyniki.txt","w")
+            plik.write(f'Współrzędne flh, PL_1992, PL_2000, NEU stacji permanentnej GNSS \n')
+            plik.write(f'Obserwatorium Astronomiczno-Geodezyjne w Józefosławiu \n')
+            plik.write(f'# ************************************* \n')
+            plik.write(f'# fLh **********************************\n')
+            plik.write(f'  f[d]         l[d]         h[m] \n')
+            plik.write(f'# ************************************* \n')
+            for A,B,C in zip(F,L,H):
+                A = f'{A:7.4f}'
+                B = f'{B:7.4f}'
+                C = f'{C:7.4f}'
+                plik.write(f'{A},      {B},      {C} \n')
+                
+              
+            plik.write(f'# ************************************* \n')
+            plik.write(f'# PL_2000 ************************************* \n')
+            plik.write(f'  X[m]         Y[m] \n')
+            plik.write(f'# ************************************* \n')
+            for A,B in zip(X_00,Y_00):
+                A = f'{A:7.3f}'
+                B = f'{B:7.3f}'
+                plik.write(f'{A},   {B} \n')
+                
+            plik.write(f'# ************************************* \n')
+            plik.write(f'# PL_1992 ************************************* \n')
+            plik.write(f'  X[m]         Y[m] \n')
+            plik.write(f'# ************************************* \n')
+            for A,B in zip(X_92,Y_92):
+                A = f'{A:7.3f}'
+                B = f'{B:7.3f}'
+                plik.write(f'{A},   {B} \n')
         
-      
-    plik.write(f'# ************************************* \n')
-    plik.write(f'# PL_2000 ************************************* \n')
-    plik.write(f'  X[m]         Y[m] \n')
-    plik.write(f'# ************************************* \n')
-    for A,B in zip(X_00,Y_00):
-        A = f'{A:7.3f}'
-        B = f'{B:7.3f}'
-        plik.write(f'{A},   {B} \n')
+            plik.write(f'# ************************************* \n')
+            plik.write(f'# NEU ************************************* \n')
+            plik.write(f'  N[m]         E[m]         U[m] \n')
+            plik.write(f'# ************************************* \n')
         
-    plik.write(f'# ************************************* \n')
-    plik.write(f'# PL_1992 ************************************* \n')
-    plik.write(f'  X[m]         Y[m] \n')
-    plik.write(f'# ************************************* \n')
-    for A,B in zip(X_92,Y_92):
-        A = f'{A:7.3f}'
-        B = f'{B:7.3f}'
-        plik.write(f'{A},   {B} \n')
-
-    plik.write(f'# ************************************* \n')
-    plik.write(f'# NEU ************************************* \n')
-    plik.write(f'  N[m]         E[m]         U[m] \n')
-    plik.write(f'# ************************************* \n')
-
-    for A,B,C in zip(N,E,U):
-        A = f'{A:7.3f}'
-        B = f'{B:7.3f}'
-        C = f'{C:7.3f}'
-        plik.write(f'{A},   {B},      {C} \n')
-    plik.close()
+            for A,B,C in zip(N,E,U):
+                A = f'{A:7.3f}'
+                B = f'{B:7.3f}'
+                C = f'{C:7.3f}'
+                plik.write(f'{A},   {B},      {C} \n')
+            plik.close()
         
         
         
@@ -530,7 +531,7 @@ if __name__ == "__main__":
  #   print('')
  #  print(N, E, U)
   #  print('')
-  '''
+'''
     for A,B,C in zip(X,Y,Z):
         f, l, h = geo.XYZ2flh(A, B, C)
         F.append(degrees(f))
