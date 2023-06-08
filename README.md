@@ -17,7 +17,7 @@
 
 # 4) INSTRUKCJA KORZYSTANIA Z PROGRAMU 
     program działa na dwa sposoby: 
-      - WCZYTANIE PLIKU.txt W SKRYPCIE PYTHON
+      - WCZYTANIE PLIKU.txt W COMMAND WINDOW
        plik.txt - jest to plik ze współrzędnymi geocentrycznymi(X,Y,Z)
        wspołrzędne należy wpisać w kolejności X,Y,Z odzielając je przecinkami
        przykład zapisu:
@@ -30,12 +30,13 @@
        aby program wywołał, ten plik musi się nazywać "wsp_inp.txt" , w przeciwnym wypadku plik nie zostanie wczytany. 
        Plik z wynikami o nazwie wyniki.txt zostanie utworzony w folderze, którym znajduję sie skrypt programu 
        kolejność wyników: wsp. 1-geodezyjne, 2-geocentryczne PL-2000, 3-geocentryczne PL-1992, 4-topocentryczne 
-       - Z WYKORZYSTANIEM BIBLIOTEKI ARGPARSE
+       W otwartym command window należy wpisać "python zajęcia_z_github.py -t wsp_inp.txt
+       - Z WYKORZYSTANIEM BIBLIOTEKI ARGPARSE (dla współrzędnych jednego punktu) 
        aby policzyć współrzędne należy otworzyć command window ( aby to zrobić należy otworzyć folder w którym znajduje się skrypt programu
        w ścieżce pliku należy kliknąc strzałkę, usunać tekts, który podświetli się na niebiesko, napisac "cmd" i nacisnąć enter
-       w otwartm command window należy wpisać "python pies.py -m "nazwa_modelu" -x 100 -y 100 -z 100"     (jako nazwa_modelu możemy przyjąć wgs84 lub grs80, wsp są przykładowe )
+       w otwartym command window należy wpisać "python pies.py -m "nazwa_modelu" -x 100 -y 100 -z 100"     (jako nazwa_modelu możemy przyjąć wgs84 lub grs80, wsp są przykładowe )
        wartosći i argumenty odzielamy spacją
-       kolejność wyników: wsp. 1-geodezyjne, 2-geocentryczne PL-2000, 3-geocentryczne PL-1992, 4-topocentryczne
+       kolejność wyników: wsp. 1-geodezyjne, 2-geocentryczne PL-2000, 3-geocentryczne PL-1992, 4-topocentryczny 
 #    5) ZNANE BŁĘDY I NIETYPOWE ZACHOWANIA PROGRAMU
        jedynym nietypowym zachowaniem programu jest problem z wynikami topocentrycznymi(N,E,U) często wartości wyników są nie poprawne     
 
