@@ -235,6 +235,7 @@ class Transformation:
         y92 = y * m + 500000
             
         return(x92, y92)
+'''    
 X = []
 Y = []
 Z = []
@@ -248,8 +249,8 @@ Y_00 = []
 N = []
 E = []
 U = []
-
-
+'''
+    
     def wczytanie_pliku(self, Dane):
         '''
         wczytanie pliku z danymi X,Y,Z oraz swtorzenie posegregowanych 
