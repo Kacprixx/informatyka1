@@ -1,12 +1,6 @@
 #Poczatek projektu
 from math import *
-<<<<<<< HEAD
-#import numpy as np
-#@@@
-=======
 
-
->>>>>>> a9a0f26f785f6b578d4371c67712258b60ce1990
 
 
 class Transformation:
