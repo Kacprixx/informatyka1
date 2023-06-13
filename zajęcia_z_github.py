@@ -2,7 +2,6 @@
 from math import *
 from argparse import ArgumentParser
 
-#
 
 class Transformation:
     def __init__(self, model: str = "grs80"):
