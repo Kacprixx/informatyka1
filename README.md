@@ -30,11 +30,11 @@
        aby program wywołał, ten plik musi się nazywać "wsp_inp.txt" , w przeciwnym wypadku plik nie zostanie wczytany. 
        Plik z wynikami o nazwie wyniki.txt zostanie utworzony w folderze, którym znajduję sie skrypt programu 
        kolejność wyników: wsp. 1-geodezyjne, 2-geocentryczne PL-2000, 3-geocentryczne PL-1992, 4-topocentryczne 
-       W otwartym command window należy wpisać "python zajęcia_z_github.py -t wsp_inp.txt
+       W otwartym command window należy wpisać "python zajęcia_z_github.py -m nazwa_modelu -t wsp_inp.txt (jako nazwa_modelu możemy przyjąć wgs84 lub grs80)
        - Z WYKORZYSTANIEM BIBLIOTEKI ARGPARSE (dla współrzędnych jednego punktu) 
        aby policzyć współrzędne należy otworzyć command window ( aby to zrobić należy otworzyć folder w którym znajduje się skrypt programu
        w ścieżce pliku należy kliknąc strzałkę, usunać tekts, który podświetli się na niebiesko, napisac "cmd" i nacisnąć enter
-       w otwartym command window należy wpisać "python pies.py -m "nazwa_modelu" -x 100 -y 100 -z 100"     (jako nazwa_modelu możemy przyjąć wgs84 lub grs80, wsp są przykładowe )
+       w otwartym command window należy wpisać "python pies.py -m nazwa_modelu -x 100 -y 100 -z 100"     (jako nazwa_modelu możemy przyjąć wgs84 lub grs80, wsp są przykładowe )
        wartosći i argumenty odzielamy spacją
        kolejność wyników: wsp. 1-geodezyjne, 2-geocentryczne PL-2000, 3-geocentryczne PL-1992, 4-topocentryczny 
 #    5) ZNANE BŁĘDY I NIETYPOWE ZACHOWANIA PROGRAMU
