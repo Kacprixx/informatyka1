@@ -255,7 +255,9 @@ U = []
 
 
 parser = ArgumentParser()
+parser.add_argument('-m', '--m', type = str, help = 'podaj elipsoide')
 parser.add_argument('-t', '--t', type=str, help="Podaj nazwe pliku tekstowegoz danymi z rozszerzeniem txt")
+
 args = parser.parse_args()
             
 with open(args.t, 'r') as plik:
