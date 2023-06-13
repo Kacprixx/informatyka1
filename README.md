@@ -38,5 +38,5 @@
        wartosći i argumenty odzielamy spacją
        kolejność wyników: wsp. 1-geodezyjne, 2-geocentryczne PL-2000, 3-geocentryczne PL-1992, 4-topocentryczny 
 #    5) ZNANE BŁĘDY I NIETYPOWE ZACHOWANIA PROGRAMU
-       jedynym nietypowym zachowaniem programu jest problem z wynikami topocentrycznymi(N,E,U) często wartości wyników są nie poprawne     
-
+       nietypowym zachowaniem programu jest problem z wynikami topocentrycznymi(N,E,U) często wartości wyników są nie poprawne     
+       Podczas poprawy programu aby można było wgrywać plik tekstowy w command window powstał konflikt przy próbie wywołania pojedyńczych współrzędnych. Dlatego          teraz gdy chce sie przeliczyć pojedyńcze współrzędne należy je wgrać do pliku textowego i postąpić zgodnie z instrukcją programu pierwszego sposobu. 
